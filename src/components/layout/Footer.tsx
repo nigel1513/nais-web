@@ -10,6 +10,20 @@ export function Footer() {
           <div className="space-y-4">
             <Wordmark />
             <p className="max-w-xs text-sm leading-relaxed text-muted">{SITE.mission}.</p>
+            <dl className="space-y-1.5 pt-2 text-sm">
+              <div className="flex gap-3">
+                <dt className="w-20 shrink-0 text-muted">문의</dt>
+                <dd>{SITE.contact.name} · <a href={`mailto:${SITE.contact.email}`} className="text-fg underline decoration-white/25 underline-offset-4 hover:decoration-cyan">{SITE.contact.email}</a></dd>
+              </div>
+              <div className="flex gap-3">
+                <dt className="w-20 shrink-0 text-muted">Family Site</dt>
+                <dd>
+                  {SITE.familySites.map((s) => (
+                    <SmartLink key={s.href} href={s.href} className="text-fg transition-colors hover:text-cyan">{s.label} ↗</SmartLink>
+                  ))}
+                </dd>
+              </div>
+            </dl>
           </div>
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
             {SITE.footerGroups.map((g) => (

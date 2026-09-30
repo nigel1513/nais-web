@@ -6,7 +6,7 @@ import { Convergence } from "@/components/home/Convergence";
 import { Autonomous } from "@/components/home/Autonomous";
 import { Moonshot } from "@/components/home/Moonshot";
 import { Ecosystem, InstituteLogos } from "@/components/home/Ecosystem";
-import { News, NextSteps } from "@/components/home/News";
+import { News } from "@/components/home/News";
 
 const IDS = HOME_SECTIONS.map((s) => s.id);
 
@@ -16,7 +16,6 @@ export default function Home() {
       <ParticleLayer sectionIds={IDS} />
       <Hero /><Platform /><Convergence /><Autonomous /><Moonshot /><Ecosystem /><News />
       <InstituteLogos />
-      <NextSteps />
     </>
   );
 }

@@ -7,7 +7,6 @@ const LEFT_EDGES = [
   "#platform .eyebrow",
   "#news .eyebrow",
   "#institutes .eyebrow",
-  "#next-steps .eyebrow",
   "footer .wordmark",
 ];
 

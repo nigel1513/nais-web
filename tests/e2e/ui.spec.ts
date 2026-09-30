@@ -12,12 +12,6 @@ test("K-Moonshot lists official mission names", async ({ page }) => {
   for (const m of ["AI과학자", "반도체", "신약", "휴머노이드", "BCI"]) await expect(list).toContainText(m);
 });
 
-test("next-steps band links to careers, programs and the org chart", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByRole("link", { name: /조직도 보기/ })).toHaveAttribute("href", "/about/");
-  await expect(page.getByRole("link", { name: "사업 공고 보기" })).toHaveAttribute("href", "/programs/");
-  await expect(page.locator("#convergence").getByRole("link", { name: "Seed형 공모 안내" })).toHaveAttribute("href", "/programs/");
-});
 
 test("mobile menu exposes every section", async ({ page, isMobile }) => {
   test.skip(!isMobile, "모바일 전용");
@@ -62,11 +56,6 @@ test("ecosystem lists the 25 institute CIs instead of a text marquee", async ({ 
   await expect(page.locator('#institutes img[alt="한국원자력연구원"]')).toHaveCount(1);
 });
 
-test("next steps sit on their own solid band, not over the sphere", async ({ page }) => {
-  await page.goto("/");
-  const bg = await page.locator("#next-steps").evaluate((el) => getComputedStyle(el).backgroundColor);
-  expect(bg).not.toBe("rgba(0, 0, 0, 0)");
-});
 
 test("03 autonomous shows only animated English stages", async ({ page }) => {
   await page.goto("/");
@@ -101,12 +90,12 @@ test("institute CIs render with a consistent optical size", async ({ page }) => 
   expect(Math.max(...areas) / Math.min(...areas)).toBeLessThan(1.8);
 });
 
-test("institute logos sit after the news and before next steps", async ({ page }) => {
+test("institute logos close the page after the news, with no Next Steps band", async ({ page }) => {
   await page.goto("/");
   const top = (sel: string) => page.locator(sel).evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
-  const [news, inst, next] = [await top("#news"), await top("#institutes"), await top("#next-steps")];
-  expect(inst).toBeGreaterThan(news);
-  expect(next).toBeGreaterThan(inst);
+  expect(await top("#institutes")).toBeGreaterThan(await top("#news"));
+  await expect(page.locator("#next-steps")).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText("Next Steps");
 });
 
 test("ecosystem list uses the same official names and order as the institute CI list", async ({ page }) => {
@@ -121,7 +110,7 @@ test("ecosystem list uses the same official names and order as the institute CI 
 
 test("every careers link goes to the NST recruitment site in a new tab", async ({ page, isMobile }) => {
   await page.goto("/");
-  const links = [page.locator("#next-steps").getByRole("link", { name: "채용 안내" }), page.locator("footer").getByRole("link", { name: "채용 안내" }), page.locator("#news").getByRole("link", { name: /채용/ })];
+  const links = [page.locator("footer").getByRole("link", { name: "채용 안내" }), page.locator("#news").getByRole("link", { name: /채용/ })];
   if (!isMobile) links.push(page.getByRole("navigation", { name: "주 메뉴" }).getByRole("link", { name: "Careers" }));
   for (const l of links) {
     await expect(l).toHaveAttribute("href", "https://nst.fairy.im/");

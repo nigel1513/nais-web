@@ -58,9 +58,3 @@ export const NEWS: { date: string; category: string; title: string; detail: stri
   { date: "2026-09-29", category: "공모", title: "2026 NAIS AI 융합연구사업 Seed형 공모", detail: "과제당 최대 2억 원, 10월 20일까지 접수합니다.", href: "/programs/" },
   { date: "2026-09-23", category: "채용", title: "2026년도 NAIS 제3차 정규직 채용", detail: "연구직·연구기술직 29명, 10월 12일 14:00까지 접수합니다.", href: RECRUIT_URL },
 ];
-
-export const NEXT_STEPS = [
-  { title: "함께 연구할 사람을 찾습니다", body: "연구직·연구기술직 29명을 채용합니다.", link: "채용 안내", href: RECRUIT_URL },
-  { title: "AI 융합연구사업", body: "과학 AI 과제를 제안하고 GPU와 공용 모델을 지원받으세요.", link: "사업 공고 보기", href: "/programs/" },
-  { title: "NAIS 조직", body: "센터를 구성하는 본부·단·팀과 하는 일을 소개합니다.", link: "조직도 보기", href: "/about/" },
-];

@@ -1,29 +1,9 @@
-import { HOME_SECTIONS, NEWS, NEXT_STEPS } from "@/content/home";
+import { HOME_SECTIONS, NEWS } from "@/content/home";
 import { TextLink } from "@/components/ui/TextLink";
 import { SmartLink } from "@/components/ui/SmartLink";
 import { Section } from "./Section";
 
 const md = (d: string) => d.slice(5).replace("-", ".");
-
-export function NextSteps() {
-  return (
-    <div id="next-steps" className="relative z-10 bg-ink-950 pb-28 pt-16">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
-      <div className="container-site">
-      <p className="eyebrow">Next Steps</p>
-      <div className="mt-8 grid gap-12 md:grid-cols-3">
-        {NEXT_STEPS.map((n) => (
-          <div key={n.title}>
-            <h3 className="text-[1.5rem] font-semibold leading-tight tracking-[-0.025em]">{n.title}</h3>
-            <p className="mt-3 text-[15px] leading-relaxed text-muted">{n.body}</p>
-            <TextLink href={n.href} className="mt-5">{n.link}</TextLink>
-          </div>
-        ))}
-      </div>
-      </div>
-    </div>
-  );
-}
 
 export function News() {
   const s = HOME_SECTIONS[6];

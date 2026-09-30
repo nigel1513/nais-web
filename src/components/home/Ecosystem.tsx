@@ -4,7 +4,7 @@ import { INSTITUTES } from "@/content/institutes";
 import { ciSize } from "@/lib/ci";
 import { Section } from "./Section";
 
-/** 소관 연구기관 CI 목록. 소식 다음·Next Steps 앞에 두며, 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
+/** 소관 연구기관 CI 목록. 소식 다음, 푸터 바로 앞에 두며 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
 export function InstituteLogos() {
   return (
     <div id="institutes" className="relative z-10 bg-ink-950 pb-24 pt-16">

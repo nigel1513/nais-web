@@ -28,6 +28,8 @@ export const SITE = {
     { title: "사업·소식", links: [{ label: "사업 공고", href: "/programs/" }, { label: "뉴스", href: "/news/" }] },
     { title: "채용", links: [{ label: "채용 안내", href: RECRUIT_URL }] },
   ],
+  contact: { name: "유용균", email: "ygyu@nst.re.kr" },
+  familySites: [{ label: "국가과학기술연구회", href: "https://www.nst.re.kr/" }],
   legalLinks: [
     { label: "개인정보처리방침", href: "/privacy/" },
     { label: "사이트맵", href: "/sitemap.xml" },

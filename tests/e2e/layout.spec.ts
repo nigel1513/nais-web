@@ -33,3 +33,13 @@ test("home loads without console errors (e.g. prefetch 404s)", async ({ page }) 
   await page.waitForTimeout(1500);
   expect(errors).toEqual([]);
 });
+
+test("footer shows the contact person and the NST family site", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.locator("footer");
+  await expect(footer).toContainText("유용균");
+  await expect(footer.getByRole("link", { name: "ygyu@nst.re.kr" })).toHaveAttribute("href", "mailto:ygyu@nst.re.kr");
+  const family = footer.getByRole("link", { name: /국가과학기술연구회/ });
+  await expect(family).toHaveAttribute("href", "https://www.nst.re.kr/");
+  await expect(family).toHaveAttribute("target", "_blank");
+});

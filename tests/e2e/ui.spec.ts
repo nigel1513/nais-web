@@ -109,11 +109,22 @@ test("institute logos sit after the news and before next steps", async ({ page }
   expect(next).toBeGreaterThan(inst);
 });
 
-test("ecosystem section lists all 25 institutes equally inside the text column", async ({ page }) => {
+test("ecosystem list uses the same official names and order as the institute CI list", async ({ page }) => {
   await page.goto("/");
-  const list = page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"] li');
-  await expect(list).toHaveCount(25);
+  const names = await page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"] li').allTextContents();
+  const alts = await page.locator("#institutes img").evaluateAll((imgs) => imgs.map((i) => i.getAttribute("alt")));
+  expect(names).toHaveLength(25);
+  expect(names).toEqual(alts);
   const right = await page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"]').evaluate((el) => el.getBoundingClientRect().right);
   expect(right).toBeLessThanOrEqual(await page.evaluate(() => window.innerWidth));
-  await expect(page.locator("#ecosystem")).not.toContainText("대덕");
+});
+
+test("every careers link goes to the NST recruitment site in a new tab", async ({ page, isMobile }) => {
+  await page.goto("/");
+  const links = [page.locator("#next-steps").getByRole("link", { name: "채용 안내" }), page.locator("footer").getByRole("link", { name: "채용 안내" }), page.locator("#news").getByRole("link", { name: /채용/ })];
+  if (!isMobile) links.push(page.getByRole("navigation", { name: "주 메뉴" }).getByRole("link", { name: "Careers" }));
+  for (const l of links) {
+    await expect(l).toHaveAttribute("href", "https://nst.fairy.im/");
+    await expect(l).toHaveAttribute("target", "_blank");
+  }
 });

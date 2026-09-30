@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "@/content/site";
 
@@ -30,9 +30,9 @@ export function MobileMenu() {
           <ul className="border-t border-white/10">
             {SITE.nav.map((item) => (
               <li key={item.href} className="border-b border-white/10">
-                <Link href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 text-xl font-semibold">
+                <SmartLink href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between py-4 text-xl font-semibold">
                   {item.label}<span aria-hidden="true" className="text-muted">›</span>
-                </Link>
+                </SmartLink>
               </li>
             ))}
           </ul>

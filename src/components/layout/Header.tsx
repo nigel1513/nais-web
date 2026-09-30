@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE } from "@/content/site";
 import { Wordmark } from "./Wordmark";
 import { MobileMenu } from "./MobileMenu";
+import { SmartLink } from "@/components/ui/SmartLink";
 
 export function Header() {
   return (
@@ -14,7 +15,7 @@ export function Header() {
         <nav aria-label="주 메뉴" className="hidden sm:block">
           <ul className="flex gap-7 text-sm text-fg/70">
             {SITE.nav.map((item) => (
-              <li key={item.href}><Link className="transition-colors hover:text-fg" href={item.href}>{item.label}</Link></li>
+              <li key={item.href}><SmartLink className="transition-colors hover:text-fg" href={item.href}>{item.label}</SmartLink></li>
             ))}
           </ul>
         </nav>

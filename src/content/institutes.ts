@@ -27,12 +27,12 @@ export const INSTITUTES: Institute[] = [
   { code: "WiKim", nameKo: "세계김치연구소", city: "광주", lon: 126.84, lat: 35.18 , ci: { width: 105, height: 55 }, field: "life", spectrum: 0.85 },
   { code: "KIGAM", nameKo: "한국지질자원연구원", city: "대전", lon: 127.357, lat: 36.3749 , ci: { width: 204, height: 24 }, field: "earth", spectrum: 0.3 },
   { code: "KIMM", nameKo: "한국기계연구원", city: "대전", lon: 127.3571, lat: 36.3918 , ci: { width: 197, height: 36 }, field: "engineering", spectrum: 0.65 },
-  { code: "KIMS", nameKo: "한국재료연구원", city: "창원", lon: 128.676, lat: 35.192 , ci: { width: 202, height: 34 }, field: "chemistry", spectrum: 0.6 },
   { code: "KARI", nameKo: "한국항공우주연구원", city: "대전", lon: 127.3565, lat: 36.3735 , ci: { width: 199, height: 52 }, field: "physics", spectrum: 0.7 },
   { code: "KIER", nameKo: "한국에너지기술연구원", city: "대전", lon: 127.357, lat: 36.38 , ci: { width: 199, height: 37 }, field: "earth", spectrum: 0.6 },
   { code: "KERI", nameKo: "한국전기연구원", city: "창원", lon: 128.717, lat: 35.19 , ci: { width: 200, height: 22 }, field: "earth", spectrum: 0.72 },
   { code: "KRICT", nameKo: "한국화학연구원", city: "대전", lon: 127.36, lat: 36.3755 , ci: { width: 201, height: 31 }, field: "chemistry", spectrum: 0.45 },
   { code: "KIT", nameKo: "국가독성과학연구소", city: "대전", lon: 127.349, lat: 36.3895 , ci: { width: 82, height: 66 }, field: "chemistry", spectrum: 0.52 },
   { code: "KAERI", nameKo: "한국원자력연구원", city: "대전", lon: 127.371, lat: 36.426 , ci: { width: 199, height: 55 }, field: "physics", spectrum: 0.42 },
+  { code: "KIMS", nameKo: "한국재료연구원", city: "창원", lon: 128.676, lat: 35.192 , ci: { width: 202, height: 34 }, field: "chemistry", spectrum: 0.6 },
   { code: "KFE", nameKo: "한국핵융합에너지연구원", city: "대전", lon: 127.366, lat: 36.366 , ci: { width: 201, height: 25 }, field: "physics", spectrum: 0.28 },
 ];

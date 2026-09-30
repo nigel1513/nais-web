@@ -1,5 +1,6 @@
 import { HOME_SECTIONS, NEWS, NEXT_STEPS } from "@/content/home";
 import { TextLink } from "@/components/ui/TextLink";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { Section } from "./Section";
 
 const md = (d: string) => d.slice(5).replace("-", ".");
@@ -41,7 +42,7 @@ export function News() {
             </div>
             <div>
               <h4 className="text-[1.2rem] font-semibold leading-snug tracking-[-0.02em]">
-                <a href={n.href} className="transition-colors hover:text-cyan">{n.title}</a>
+                <SmartLink href={n.href} className="transition-colors hover:text-cyan">{n.title}</SmartLink>
               </h4>
               <p className="mt-1.5 text-[15px] leading-relaxed text-muted">{n.detail}</p>
             </div>

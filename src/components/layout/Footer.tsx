@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { SITE } from "@/content/site";
 import { Wordmark } from "./Wordmark";
 
@@ -17,7 +17,7 @@ export function Footer() {
                 <h2 className="text-[13px] font-semibold text-fg">{g.title}</h2>
                 <ul className="mt-4 space-y-2.5 text-sm">
                   {g.links.map((l) => (
-                    <li key={l.label}><Link className="text-muted transition-colors hover:text-fg" href={l.href}>{l.label}</Link></li>
+                    <li key={l.label}><SmartLink className="text-muted transition-colors hover:text-fg" href={l.href}>{l.label}</SmartLink></li>
                   ))}
                 </ul>
               </div>
@@ -29,10 +29,7 @@ export function Footer() {
           <ul className="flex gap-5">
             {SITE.legalLinks.map((l) => (
               <li key={l.label}>
-                {/* sitemap.xml 같은 파일은 라우트가 아니므로 Link 프리페치를 쓰지 않는다 */}
-                {l.href.endsWith(".xml")
-                  ? <a className="hover:text-fg" href={l.href}>{l.label}</a>
-                  : <Link className="hover:text-fg" href={l.href}>{l.label}</Link>}
+                <SmartLink className="hover:text-fg" href={l.href}>{l.label}</SmartLink>
               </li>
             ))}
           </ul>

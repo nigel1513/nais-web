@@ -36,10 +36,8 @@ export function Ecosystem() {
     <Section id={s.id} eyebrow={s.eyebrow} title={s.title} lead={ECOSYSTEM_BODY}>
       <div data-reveal>
         <p className="text-[13px] text-muted">소관 연구기관 {INSTITUTES.length}곳</p>
-        <ul aria-label={`소관 연구기관 ${INSTITUTES.length}곳`} className="mt-4 grid grid-cols-4 gap-x-6 gap-y-2 font-mono text-[13px] tracking-wide text-fg/80 sm:grid-cols-5">
-          {INSTITUTES.map((i) => (
-            <li key={i.code} title={i.nameKo}>{i.code}<span className="sr-only"> {i.nameKo}</span></li>
-          ))}
+        <ul aria-label={`소관 연구기관 ${INSTITUTES.length}곳`} className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[14px] text-fg/80 sm:grid-cols-3">
+          {INSTITUTES.map((i) => <li key={i.code}>{i.nameKo}</li>)}
         </ul>
       </div>
     </Section>

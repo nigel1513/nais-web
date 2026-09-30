@@ -1,4 +1,7 @@
 // 출처: nais.re.kr 메타 태그(미션·슬로건·비전), 과기정통부 보도설명 2026-07-10(출범 시점)
+// 채용공고는 국가과학기술연구회 채용 사이트에서 받는다
+export const RECRUIT_URL = "https://nst.fairy.im/";
+
 export const SITE = {
   shortName: "NAIS",
   nameKo: "국가과학AI연구센터",
@@ -14,7 +17,7 @@ export const SITE = {
     { label: "Research", href: "/research/" },
     { label: "Programs", href: "/programs/" },
     { label: "News", href: "/news/" },
-    { label: "Careers", href: "/careers/" },
+    { label: "Careers", href: RECRUIT_URL },
   ],
   footerGroups: [
     { title: "센터 소개", links: [{ label: "조직도", href: "/about/" }] },
@@ -23,7 +26,7 @@ export const SITE = {
       { label: "자율형 AI 과학자", href: "/#autonomous" }, { label: "K-문샷", href: "/#moonshot" },
     ] },
     { title: "사업·소식", links: [{ label: "사업 공고", href: "/programs/" }, { label: "뉴스", href: "/news/" }] },
-    { title: "채용", links: [{ label: "채용 안내", href: "/careers/" }] },
+    { title: "채용", links: [{ label: "채용 안내", href: RECRUIT_URL }] },
   ],
   legalLinks: [
     { label: "개인정보처리방침", href: "/privacy/" },

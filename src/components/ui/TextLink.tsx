@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SmartLink } from "./SmartLink";
 
 /** 레퍼런스(NVIDIA·DeepMind) 방식의 텍스트 링크: 굵은 라벨 + 호버 시 밀려나는 화살표. */
 export function TextLink({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
@@ -11,5 +11,5 @@ export function TextLink({ href, children, className = "" }: { href: string; chi
       </svg>
     </>
   );
-  return href.startsWith("#") ? <a href={href} className={cls}>{inner}</a> : <Link href={href} className={cls}>{inner}</Link>;
+  return <SmartLink href={href} className={cls}>{inner}</SmartLink>;
 }

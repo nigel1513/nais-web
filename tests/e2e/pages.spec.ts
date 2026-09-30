@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-for (const [path, title] of [["/research/", "Research"], ["/programs/", "Programs"], ["/news/", "News"], ["/careers/", "Careers"]]) {
+for (const [path, title] of [["/research/", "Research"], ["/programs/", "Programs"], ["/news/", "News"]]) {
   test(`${path} renders coming-soon page`, async ({ page }) => {
     const res = await page.goto(path);
     expect(res?.status()).toBe(200);
@@ -14,5 +14,6 @@ test("sitemap lists home and five pages", async ({ request }) => {
   expect(res.status()).toBe(200);
   const xml = await res.text();
   expect(xml).toContain("<urlset");
-  for (const p of ["/about/", "/research/", "/programs/", "/news/", "/careers/"]) expect(xml).toContain(p);
+  for (const p of ["/about/", "/research/", "/programs/", "/news/"]) expect(xml).toContain(p);
+  expect(xml).not.toContain("/careers/");
 });

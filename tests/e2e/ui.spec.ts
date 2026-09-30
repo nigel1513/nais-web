@@ -108,3 +108,12 @@ test("institute logos sit after the news and before next steps", async ({ page }
   expect(inst).toBeGreaterThan(news);
   expect(next).toBeGreaterThan(inst);
 });
+
+test("ecosystem section lists all 25 institutes equally inside the text column", async ({ page }) => {
+  await page.goto("/");
+  const list = page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"] li');
+  await expect(list).toHaveCount(25);
+  const right = await page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"]').evaluate((el) => el.getBoundingClientRect().right);
+  expect(right).toBeLessThanOrEqual(await page.evaluate(() => window.innerWidth));
+  await expect(page.locator("#ecosystem")).not.toContainText("대덕");
+});

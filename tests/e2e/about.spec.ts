@@ -42,3 +42,8 @@ test("closing the panel returns to the chart only", async ({ page }) => {
   await page.getByRole("button", { name: "닫기" }).click();
   await expect(page.locator("main table")).toHaveCount(0);
 });
+
+test("organization page has no dated source note", async ({ page }) => {
+  await page.goto("/about/");
+  await expect(page.locator("main")).not.toContainText("2026년 9월 기준");
+});

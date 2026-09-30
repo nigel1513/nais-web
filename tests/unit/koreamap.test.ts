@@ -42,19 +42,9 @@ describe("Korea dot-matrix map", () => {
   });
 });
 
-test("map shows every 소관 연구기관: hub label counts all 25 and each code is labelled", () => {
-  const eco = HUB_LABELS.filter((l) => l.layer === "ecosystem").map((l) => l.text);
-  const inst = HUB_LABELS.filter((l) => l.layer === "institute" || l.layer === "callout").map((l) => l.text).join(" · ");
-  expect(eco).toEqual([`NAIS · 소관 연구기관 ${INSTITUTES.length}곳`]);
-  for (const i of INSTITUTES) expect(inst).toContain(i.code);
-});
-
-test("Daedeok institutes are listed together in one callout beside the map", () => {
-  const callout = HUB_LABELS.filter((l) => l.layer === "callout");
-  expect(callout).toHaveLength(1);
-  expect(callout[0].text).toMatch(/^대덕연구개발특구/);
-  for (const i of INSTITUTES.filter((i) => i.city === "대전")) expect(callout[0].text).toContain(i.code);
-  // 상자는 지도 오른쪽(바다) 바깥에 둔다
-  expect(callout[0].p[0]).toBeGreaterThan(0.55);
+test("map labels only the NAIS hub; institutes are equal markers", () => {
+  expect(HUB_LABELS.filter((l) => l.layer === "ecosystem").map((l) => l.text)).toEqual(["NAIS"]);
+  expect(HUB_LABELS.some((l) => (l.layer as string) === "callout" || (l.layer as string) === "institute")).toBe(false);
+  expect(HUB_LABELS.map((l) => l.text).join(" ")).not.toContain("대덕");
   expect(MAP_MARKERS).toHaveLength(INSTITUTES.length);
 });

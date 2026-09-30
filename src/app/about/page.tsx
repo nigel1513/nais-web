@@ -12,7 +12,6 @@ export default function AboutPage() {
         <div className="mt-16">
           <OrgChart />
         </div>
-        <p className="mt-20 text-xs text-muted">출처: 국가과학기술연구회 조직도 (2026년 9월 기준)</p>
       </section>
     </div>
   );

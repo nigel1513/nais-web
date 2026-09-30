@@ -34,7 +34,14 @@ export function Ecosystem() {
   const s = HOME_SECTIONS[5];
   return (
     <Section id={s.id} eyebrow={s.eyebrow} title={s.title} lead={ECOSYSTEM_BODY}>
-      <p data-reveal className="text-[1.35rem] font-medium leading-snug tracking-[-0.02em] text-fg/40">Science connects.</p>
+      <div data-reveal>
+        <p className="text-[13px] text-muted">소관 연구기관 {INSTITUTES.length}곳</p>
+        <ul aria-label={`소관 연구기관 ${INSTITUTES.length}곳`} className="mt-4 grid grid-cols-4 gap-x-6 gap-y-2 font-mono text-[13px] tracking-wide text-fg/80 sm:grid-cols-5">
+          {INSTITUTES.map((i) => (
+            <li key={i.code} title={i.nameKo}>{i.code}<span className="sr-only"> {i.nameKo}</span></li>
+          ))}
+        </ul>
+      </div>
     </Section>
   );
 }

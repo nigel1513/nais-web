@@ -1,4 +1,16 @@
-import { SITE } from "@/content/site";
+import { ParticleLayer } from "@/components/three/ParticleLayer";
+
+const IDS = ["hero", "platform", "convergence", "autonomous", "moonshot", "ecosystem", "news"] as const;
+
 export default function Home() {
-  return <h1 className="px-8 pt-32 text-4xl font-bold">{SITE.slogan}</h1>;
+  return (
+    <>
+      <ParticleLayer sectionIds={IDS} />
+      {IDS.map((id) => (
+        <section key={id} id={id} className="relative z-10 flex min-h-[140vh] items-start px-8 pt-32">
+          <h2 className="text-3xl font-semibold">{id}</h2>
+        </section>
+      ))}
+    </>
+  );
 }

@@ -1,11 +1,12 @@
-// 과학기술분야 정부출연연구기관 소재지. 좌표는 각 기관 공식 주소 기준 도시 수준 근사값(시각화용, ±1km).
+// 국가과학기술연구회 소관연구기관 25개(https://www.nst.re.kr/www/contents.do?key=20, 2026-09-30 확인,).
+// 좌표는 각 기관 공식 주소 기준 도시 수준 근사값(시각화용, ±1km). CI는 public/ci/{code}.png.
 // 배포 전 기관 홈페이지 주소로 재확인할 것.
 export interface Institute { code: string; nameKo: string; city: string; lon: number; lat: number }
 
 export const INSTITUTES: Institute[] = [
   { code: "KIST", nameKo: "한국과학기술연구원", city: "서울", lon: 127.0466, lat: 37.6036 },
+  { code: "NIGT", nameKo: "국가녹색기술연구소", city: "서울", lon: 126.9975, lat: 37.5635 },
   { code: "KBSI", nameKo: "한국기초과학지원연구원", city: "대전", lon: 127.3625, lat: 36.3724 },
-  { code: "NIMS", nameKo: "국가수리과학연구소", city: "대전", lon: 127.356, lat: 36.374 },
   { code: "KASI", nameKo: "한국천문연구원", city: "대전", lon: 127.3614, lat: 36.3736 },
   { code: "KRIBB", nameKo: "한국생명공학연구원", city: "대전", lon: 127.3587, lat: 36.3735 },
   { code: "KISTI", nameKo: "한국과학기술정보연구원", city: "대전", lon: 127.3603, lat: 36.3913 },
@@ -25,7 +26,7 @@ export const INSTITUTES: Institute[] = [
   { code: "KIER", nameKo: "한국에너지기술연구원", city: "대전", lon: 127.357, lat: 36.38 },
   { code: "KERI", nameKo: "한국전기연구원", city: "창원", lon: 128.717, lat: 35.19 },
   { code: "KRICT", nameKo: "한국화학연구원", city: "대전", lon: 127.36, lat: 36.3755 },
-  { code: "KIT", nameKo: "안전성평가연구소", city: "대전", lon: 127.349, lat: 36.3895 },
+  { code: "KIT", nameKo: "국가독성과학연구소", city: "대전", lon: 127.349, lat: 36.3895 },
   { code: "KAERI", nameKo: "한국원자력연구원", city: "대전", lon: 127.371, lat: 36.426 },
   { code: "KFE", nameKo: "한국핵융합에너지연구원", city: "대전", lon: 127.366, lat: 36.366 },
 ];

@@ -37,10 +37,4 @@ p { word-break: keep-all; }
 .words-pending [data-word] { transform: translateY(0.7em); opacity: 0; }
 .hero-words [data-word] { animation: word-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
 @keyframes word-rise { from { transform: translateY(0.45em); } to { transform: none; } }
-
-/* 마키 */
-.marquee-track { animation: marquee 60s linear infinite; }
-.marquee-reverse { animation-direction: reverse; animation-duration: 75s; }
-.marquee-outline { color: transparent; -webkit-text-stroke: 1px rgba(232, 238, 245, 0.35); }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .marquee-track, .hero-words [data-word] { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-words [data-word] { animation: none; } }

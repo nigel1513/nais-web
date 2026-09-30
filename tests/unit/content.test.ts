@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { HOME_SECTIONS, NEWS, MISSIONS, PLATFORM_ITEMS } from "@/content/home";
 import { INSTITUTES } from "@/content/institutes";
+import { existsSync } from "node:fs";
 import outline from "@/content/korea-outline.json";
 
 describe("home content", () => {
@@ -26,8 +27,13 @@ describe("home content", () => {
 });
 
 describe("geo data", () => {
+  test("institutes are the 25 NST 소관연구기관 and each has a CI file", () => {
+    expect(INSTITUTES).toHaveLength(25);
+    for (const n of ["국가녹색기술연구소", "국가독성과학연구소", "한국핵융합에너지연구원"]) expect(INSTITUTES.map((i) => i.nameKo)).toContain(n);
+    expect(INSTITUTES.map((i) => i.nameKo)).not.toContain("안전성평가연구소");
+    for (const i of INSTITUTES) expect(existsSync(`public/ci/${i.code}.png`)).toBe(true);
+  });
   test("institutes inside South Korea bounds", () => {
-    expect(INSTITUTES.length).toBeGreaterThanOrEqual(20);
     INSTITUTES.forEach((i) => {
       expect(i.lon).toBeGreaterThan(124.5); expect(i.lon).toBeLessThan(130);
       expect(i.lat).toBeGreaterThan(33); expect(i.lat).toBeLessThan(38.7);

@@ -8,8 +8,8 @@ export function Section({ id, eyebrow, title, lead, as = "h2", reveal = true, ch
 }) {
   const H = as;
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="relative z-10 min-h-[140vh] px-4 md:px-8">
-      <Reveal enabled={reveal} className="mx-auto grid min-h-screen max-w-7xl items-center py-28 lg:grid-cols-12">
+    <section id={id} aria-labelledby={`${id}-title`} className="relative z-10 px-4 md:px-8">
+      <Reveal enabled={reveal} className="mx-auto grid min-h-[140vh] max-w-7xl items-center py-28 lg:grid-cols-12">
         <div className="relative min-w-0 lg:col-span-6 xl:col-span-5">
           <div aria-hidden="true" className="absolute -inset-x-4 -inset-y-12 -z-10 bg-[radial-gradient(ellipse_at_30%_50%,rgba(5,8,13,0.92),rgba(5,8,13,0.75)_55%,transparent_80%)] md:-inset-x-10" />
           <p className="eyebrow"><Scramble text={eyebrow} /></p>

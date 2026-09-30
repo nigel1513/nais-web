@@ -54,8 +54,16 @@ test("seed facts count up to their final values", async ({ page }) => {
   await expect(values.nth(1)).toHaveText("15", { timeout: 4000 });
 });
 
-test("ecosystem shows a marquee of institute names with an accessible list", async ({ page }) => {
+test("ecosystem lists the 25 institute CIs instead of a text marquee", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#ecosystem [data-marquee]")).toHaveCount(2);
-  await expect(page.locator("#ecosystem ul.sr-only li")).toHaveCount(25);
+  await expect(page.locator("#ecosystem [data-marquee]")).toHaveCount(0);
+  const logos = page.locator("#institutes img");
+  await expect(logos).toHaveCount(25);
+  await expect(page.locator('#institutes img[alt="한국원자력연구원"]')).toHaveCount(1);
+});
+
+test("next steps sit on their own solid band, not over the sphere", async ({ page }) => {
+  await page.goto("/");
+  const bg = await page.locator("#next-steps").evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(bg).not.toBe("rgba(0, 0, 0, 0)");
 });

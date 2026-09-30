@@ -6,7 +6,9 @@ const md = (d: string) => d.slice(5).replace("-", ".");
 
 function NextSteps() {
   return (
-    <div className="relative z-10 mx-auto max-w-7xl pb-28 pt-8">
+    <div id="next-steps" className="relative z-10 -mx-4 bg-ink-950 px-4 pb-28 pt-16 md:-mx-8 md:px-8">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
+      <div className="mx-auto max-w-7xl">
       <p className="eyebrow">Next Steps</p>
       <div className="mt-8 grid gap-12 md:grid-cols-3">
         {NEXT_STEPS.map((n) => (
@@ -16,6 +18,7 @@ function NextSteps() {
             <TextLink href={n.href} className="mt-5">{n.link}</TextLink>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

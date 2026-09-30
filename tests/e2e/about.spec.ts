@@ -1,36 +1,43 @@
 import { expect, test } from "@playwright/test";
 
-test("organization page is chart-first with no slogan or vision block", async ({ page }) => {
+test("organization page shows only the chart until a unit is chosen", async ({ page }) => {
   await page.goto("/about/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("조직도");
-  const main = page.locator("main");
-  await expect(main).not.toContainText("AI로 과학을, 과학으로 미래를");
-  await expect(main).not.toContainText("모든 연구자가 하나의 연구소가 되는");
-  for (const name of ["국가과학AI연구센터", "K-문샷추진지원단", "과학AI본부", "자율형AI과학자연구단", "경영전략부", "연구AX팀", "AI과학자팀"]) {
-    await expect(page.locator("#organization").getByText(name, { exact: true }).first()).toBeVisible();
+  await expect(page.locator("main")).not.toContainText("AI로 과학을, 과학으로 미래를");
+  await expect(page.locator("main table")).toHaveCount(0);
+  for (const name of ["국가과학AI연구센터", "K-문샷추진지원단", "과학AI본부", "자율형AI과학자연구단", "경영전략부", "연구AX팀", "AI과학자팀", "AI자원팀"]) {
+    await expect(page.locator("#organization").getByRole("button", { name, exact: true })).toBeVisible();
   }
 });
 
-test("a unit in the chart links to its staff table (role, duties, phone; no names)", async ({ page }) => {
+test("choosing a team opens its staff table (role, duties, phone; no names)", async ({ page }) => {
   await page.goto("/about/");
-  await page.locator("#organization").getByRole("link", { name: "연구AX팀", exact: true }).click();
+  const btn = page.locator("#organization").getByRole("button", { name: "연구AX팀", exact: true });
+  await btn.click();
+  await expect(btn).toHaveAttribute("aria-expanded", "true");
   await expect(page).toHaveURL(/#unit-ax-team$/);
-  const table = page.locator("#unit-ax-team table");
-  await expect(table).toBeVisible();
+  const table = page.locator("#unit-panel table");
   for (const h of ["직위", "담당업무", "전화"]) await expect(table.getByRole("columnheader", { name: h })).toBeVisible();
   await expect(table).toContainText("자율실험실 확산계획 수립 및 실행");
   await expect(table).toContainText("042-288-7291");
   await expect(page.locator("main")).not.toContainText("김덕환");
+  await expect(page.locator("main table")).toHaveCount(1);
 });
 
-test("units without published staff are shown but not linked", async ({ page }) => {
+test("a unit without published staff opens a notice instead of a table", async ({ page }) => {
   await page.goto("/about/");
-  const chart = page.locator("#organization");
-  await expect(chart.getByText("AI자원팀", { exact: true })).toBeVisible();
-  await expect(chart.getByRole("link", { name: "AI자원팀", exact: true })).toHaveCount(0);
+  await page.locator("#organization").getByRole("button", { name: "AI자원팀", exact: true }).click();
+  await expect(page.locator("#unit-panel")).toContainText("구성원 정보가 아직 공개되지 않았습니다");
+  await expect(page.locator("main table")).toHaveCount(0);
 });
 
-test("deep link to the chart", async ({ page }) => {
-  await page.goto("/about/#organization");
-  await expect(page.locator("#organization")).toBeInViewport();
+test("deep link opens that unit's panel", async ({ page }) => {
+  await page.goto("/about/#unit-platform-team");
+  await expect(page.locator("#unit-panel")).toContainText("AI-OS 설계 및 구축");
+});
+
+test("closing the panel returns to the chart only", async ({ page }) => {
+  await page.goto("/about/#unit-ax-team");
+  await page.getByRole("button", { name: "닫기" }).click();
+  await expect(page.locator("main table")).toHaveCount(0);
 });

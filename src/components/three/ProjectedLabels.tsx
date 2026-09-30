@@ -7,9 +7,10 @@ import { currentState } from "./ParticleSystem";
 
 const STYLE: Partial<Record<Layer, string>> = {
   hub: "font-mono text-[13px] font-semibold tracking-[0.2em] text-fg",
-  ecosystem: "font-mono text-[13px] font-semibold tracking-[0.2em] text-fg",
   hero: "font-mono text-[10px] tracking-wider text-fg/60",
   axis: "font-mono text-[11px] uppercase tracking-[0.22em] text-cyan",
+  city: "rounded bg-ink-950/80 px-1.5 py-0.5 text-[12px] font-medium text-fg/85",
+  ecosystem: "rounded-full bg-ink-950/80 px-2.5 py-1 text-[12px] font-semibold text-fg ring-1 ring-cyan/40",
   moonshot: "text-[13px] font-semibold text-fg",
 };
 const DEFAULT = "font-mono text-[11px] tracking-wider text-cyan";
@@ -48,7 +49,8 @@ export function ProjectedLabels({ container, reducedMotion }: { container: HTMLD
       if (SURFACE.includes(l.layer)) op *= THREE.MathUtils.smoothstep(v.z - center.z, -0.2, 0.5);
       v.project(camera);
       const center0 = l.layer === "hub" || l.layer === "ecosystem" || l.layer === "axis";
-      el.style.transform = `translate(${((v.x + 1) / 2) * size.width + (center0 ? 18 : 12)}px, ${((1 - v.y) / 2) * size.height - (center0 ? 26 : 8)}px)`;
+      const dx = l.layer === "city" ? 8 : center0 ? 18 : 12, dy = l.layer === "city" ? -6 : center0 ? 26 : 8;
+      el.style.transform = `translate(${((v.x + 1) / 2) * size.width + dx}px, ${((1 - v.y) / 2) * size.height - dy}px)`;
       el.style.opacity = String(op);
     });
   });

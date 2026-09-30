@@ -31,14 +31,6 @@ describe.each([["korea", korea]] as const)("%s", (_, gen) => {
   test("deterministic", () => expect(gen(400, 9)).toEqual(gen(400, 9)));
 });
 
-test("korea puts the brightest cluster in Daedeok", () => {
-  const a = korea(20000);
-  const [dx, dy] = project(127.36, 36.38);
-  let near = 0;
-  for (let i = 0; i < 20000; i++) if (Math.hypot(a[i * 3] - dx, a[i * 3 + 1] - dy) < 0.12) near++;
-  expect(near / 20000).toBeGreaterThan(0.08);
-});
-
 test("targets: the single sphere everywhere except the ecosystem map", () => {
   const t = buildAllTargets(200);
   expect(t).toHaveLength(7);

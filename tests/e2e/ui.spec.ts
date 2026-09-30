@@ -100,3 +100,11 @@ test("institute CIs render with a consistent optical size", async ({ page }) => 
   expect(areas).toHaveLength(25);
   expect(Math.max(...areas) / Math.min(...areas)).toBeLessThan(1.8);
 });
+
+test("institute logos sit after the news and before next steps", async ({ page }) => {
+  await page.goto("/");
+  const top = (sel: string) => page.locator(sel).evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
+  const [news, inst, next] = [await top("#news"), await top("#institutes"), await top("#next-steps")];
+  expect(inst).toBeGreaterThan(news);
+  expect(next).toBeGreaterThan(inst);
+});

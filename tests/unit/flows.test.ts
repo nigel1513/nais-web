@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { HUB, flowSources, buildArcs, bezier, arcPolyline, packetAttributes } from "@/lib/particles/flows";
-import { insideKorea } from "@/lib/particles/targets/korea";
+import { insideSouth } from "@/lib/particles/targets/korea";
 
 describe("flows", () => {
   test("sources exclude the Daedeok hub cluster and lie inside Korea", () => {
@@ -8,7 +8,7 @@ describe("flows", () => {
     expect(s.length).toBeGreaterThanOrEqual(30);
     for (const [x, y] of s) {
       expect(Math.hypot(x - HUB[0], y - HUB[1])).toBeGreaterThan(0.08);
-      expect(insideKorea(x, y)).toBe(true);
+      expect(insideSouth(x, y)).toBe(true);
     }
   });
   test("sources are deterministic", () => expect(flowSources()).toEqual(flowSources()));

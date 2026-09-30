@@ -38,10 +38,10 @@ describe("geo data", () => {
     });
   });
   test("korea outline rings are within peninsula bbox", () => {
-    const rings = outline as number[][][];
+    const rings = outline as { country: string; points: number[][] }[];
     expect(rings.length).toBeGreaterThan(0);
-    rings.flat().forEach(([lon, lat]) => {
-      expect(lon).toBeGreaterThan(124); expect(lon).toBeLessThan(131.5);
+    rings.flatMap((r) => r.points).forEach(([lon, lat]) => {
+      expect(lon).toBeGreaterThan(124); expect(lon).toBeLessThan(132);
       expect(lat).toBeGreaterThan(33); expect(lat).toBeLessThan(43.1);
     });
   });

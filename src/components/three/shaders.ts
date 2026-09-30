@@ -35,7 +35,7 @@ vec3 curl(vec3 p){
 
 export const pointsVertex = /* glsl */ `
 ${noise}
-uniform float uProgress, uFlowTime, uSwirl, uPixelRatio, uSize, uFlow, uBrightness, uHue;
+uniform float uProgress, uFlowTime, uSwirl, uPixelRatio, uSize, uFlow, uBrightness, uHue, uCrisp;
 attribute vec3 aFrom; attribute vec3 aTo; attribute float aSeed; attribute vec3 aScatter;
 varying float vAlpha; varying float vSeed; varying float vGlow; varying float vHue;
 void main(){
@@ -57,10 +57,11 @@ void main(){
 
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
-  float star = step(0.985, aSeed);
-  gl_PointSize = uSize * uPixelRatio * (0.5 + aSeed * 0.9) * (1.0 + star * 1.0) / -mv.z;
+  float star = step(0.985, aSeed) * (1.0 - uCrisp);
+  float vary = mix(0.5 + aSeed * 0.9, 0.9, uCrisp);   // 지도 장면에서는 크기를 균일하게
+  gl_PointSize = uSize * uPixelRatio * vary * (1.0 + star * 1.0) / -mv.z;
   float depth = smoothstep(9.5, 3.8, -mv.z);
-  vAlpha = uBrightness * (0.28 + 0.72 * aSeed) * (0.45 + 0.55 * depth);
+  vAlpha = uBrightness * mix(0.28 + 0.72 * aSeed, 0.7, uCrisp) * (0.45 + 0.55 * depth);
   vSeed = aSeed; vGlow = star; vHue = uHue;
 }`;
 

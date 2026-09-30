@@ -1,7 +1,7 @@
 import { mulberry32 } from "./rng";
 import { project } from "./geo";
 import { INSTITUTES } from "@/content/institutes";
-import { insideKorea, KOREA_BBOX } from "./targets/korea";
+import { insideSouth, KOREA_BBOX } from "./targets/korea";
 import type { Vec3 } from "./transform";
 
 /** 대덕(NAIS 허브) 위치. 지도 좌표계(XY 평면, z=0). */
@@ -18,7 +18,7 @@ export function flowSources(extra = 44, seed = 11): [number, number][] {
   for (let tries = 0; out.length < extra + 8 && tries < 5000; tries++) {
     const x = KOREA_BBOX[0] + rand() * (KOREA_BBOX[2] - KOREA_BBOX[0]);
     const y = KOREA_BBOX[1] + rand() * (SOUTH_LIMIT_Y - KOREA_BBOX[1]);
-    if (insideKorea(x, y) && far(x, y, 0.3)) out.push([x, y]);
+    if (insideSouth(x, y) && far(x, y, 0.3)) out.push([x, y]);
   }
   return out;
 }

@@ -4,8 +4,8 @@ import { INSTITUTES } from "@/content/institutes";
 import { ciSize } from "@/lib/ci";
 import { Section } from "./Section";
 
-/** 소관 연구기관 CI 목록. 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
-function InstituteLogos() {
+/** 소관 연구기관 CI 목록. 소식 다음·Next Steps 앞에 두며, 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
+export function InstituteLogos() {
   return (
     <div id="institutes" className="relative z-10 bg-ink-950 pb-24 pt-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
@@ -33,7 +33,7 @@ function InstituteLogos() {
 export function Ecosystem() {
   const s = HOME_SECTIONS[5];
   return (
-    <Section id={s.id} eyebrow={s.eyebrow} title={s.title} lead={ECOSYSTEM_BODY} after={<InstituteLogos />}>
+    <Section id={s.id} eyebrow={s.eyebrow} title={s.title} lead={ECOSYSTEM_BODY}>
       <p data-reveal className="text-[1.35rem] font-medium leading-snug tracking-[-0.02em] text-fg/40">Science connects.</p>
     </Section>
   );

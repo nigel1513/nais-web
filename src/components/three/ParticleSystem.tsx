@@ -52,7 +52,7 @@ export function ParticleSystem({ targets, reducedMotion, children }: { targets: 
     blending: THREE.AdditiveBlending,
     uniforms: {
       uProgress: { value: 1 }, uFlowTime: { value: 0 }, uSwirl: { value: 0 }, uPixelRatio: { value: 1 }, uSize: { value: 26 },
-      uFlow: { value: 0 }, uBrightness: { value: 1 }, uHue: { value: 0 },
+      uFlow: { value: 0 }, uBrightness: { value: 1 }, uHue: { value: 0 }, uCrisp: { value: 0 },
       uColorA: { value: CYAN }, uColorB: { value: BLUE }, uColorC: { value: ICE },
     },
   }), []);
@@ -74,6 +74,7 @@ export function ParticleSystem({ targets, reducedMotion, children }: { targets: 
     u.uSize.value = 26 * look.size;
     u.uBrightness.value = look.brightness;
     u.uHue.value = look.hue;
+    u.uCrisp.value = look.crisp;
     u.uPixelRatio.value = gl.getPixelRatio();
     // 한반도 장면에서는 지도가 정면을 향해야 하므로, 그 장면에 가까울수록 누적 회전의 영향을 0으로 줄인다
     const e = s.t * s.t * (3 - 2 * s.t);

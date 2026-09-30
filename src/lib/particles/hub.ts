@@ -2,6 +2,7 @@ import type { Vec3 } from "./transform";
 import type { ResolvedState } from "@/lib/scroll/resolve";
 import { STATES } from "./states";
 import { HUB } from "./flows";
+import { project } from "./geo";
 import { INSTITUTES, type Field } from "@/content/institutes";
 import { MISSIONS, LOOP_STAGES } from "@/content/home";
 
@@ -63,7 +64,13 @@ export function loopPoint(u: number): Vec3 {
 }
 export const LOOP_STATIONS = LOOP_STAGES.map((label, i) => ({ label, p: loopPoint(i / LOOP_STAGES.length) }));
 
-export type Layer = "hub" | "axis" | "hero" | "platform" | "convergence" | "autonomous" | "moonshot" | "ecosystem" | "closing";
+// 대전을 제외한 기관 소재 도시(같은 도시 기관 좌표의 평균)
+const CITY_LABELS = [...new Set(INSTITUTES.map((i) => i.city))].filter((c) => c !== "대전").map((city) => {
+  const list = INSTITUTES.filter((i) => i.city === city).map((i) => project(i.lon, i.lat));
+  return { city, x: list.reduce((s, p) => s + p[0], 0) / list.length, y: list.reduce((s, p) => s + p[1], 0) / list.length };
+});
+
+export type Layer = "hub" | "axis" | "city" | "hero" | "platform" | "convergence" | "autonomous" | "moonshot" | "ecosystem" | "closing";
 
 /** 스크롤 상태에서 각 레이어의 보이는 정도(0~1). hub(코어·기관 노드·연결선)는 한반도 지도 장면에서만 사라진다. */
 export function layerWeights(s: ResolvedState): Record<Layer, number> {
@@ -71,7 +78,7 @@ export function layerWeights(s: ResolvedState): Record<Layer, number> {
   const at = (i: number) => (s.from === s.to ? (s.from === i ? 1 : 0) : (s.to === i ? e : 0) + (s.from === i ? 1 - e : 0));
   const w = Object.fromEntries(STATES.map((name, i) => [name, at(i)])) as Record<Exclude<Layer, "hub">, number>;
   // 축 라벨(기초·응용)은 한반도 장면과 마지막 섹션(Next Steps 띠 위)에서는 숨긴다
-  return { ...w, hub: 1 - w.ecosystem, axis: Math.max(0, 1 - w.ecosystem - w.closing) };
+  return { ...w, hub: 1 - w.ecosystem, axis: Math.max(0, 1 - w.ecosystem - w.closing), city: w.ecosystem };
 }
 
 const SHELL_DIR: Vec3 = [0.93, 0.28, 0.24];
@@ -84,5 +91,6 @@ export const HUB_LABELS: { text: string; p: Vec3; layer: Layer }[] = [
   { text: "Science × AI", p: [0, 0.32, 0], layer: "convergence" },
   ...LOOP_STATIONS.map((s) => ({ text: s.label, p: s.p, layer: "autonomous" as const })),
   ...MISSION_NODES.map((m) => ({ text: m.name, p: m.p, layer: "moonshot" as const })),
-  { text: "NAIS", p: [HUB[0], HUB[1], 0], layer: "ecosystem" },
+  { text: `NAIS · 대덕 ${INSTITUTES.filter((i) => i.city === "대전").length}개 기관`, p: [HUB[0], HUB[1], 0], layer: "ecosystem" },
+  ...CITY_LABELS.map((c) => ({ text: c.city, p: [c.x, c.y, 0] as Vec3, layer: "city" as const })),
 ];

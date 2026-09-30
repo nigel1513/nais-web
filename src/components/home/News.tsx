@@ -4,7 +4,7 @@ import { Section } from "./Section";
 
 const md = (d: string) => d.slice(5).replace("-", ".");
 
-function NextSteps() {
+export function NextSteps() {
   return (
     <div id="next-steps" className="relative z-10 bg-ink-950 pb-28 pt-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
@@ -27,7 +27,7 @@ function NextSteps() {
 export function News() {
   const s = HOME_SECTIONS[6];
   return (
-    <Section id={s.id} eyebrow={s.eyebrow} title={s.title} after={<NextSteps />}>
+    <Section id={s.id} eyebrow={s.eyebrow} title={s.title}>
       <div data-reveal className="flex items-baseline justify-between">
         <h3 className="text-[13px] text-muted">최신 소식</h3>
         <TextLink href="/news/" className="text-sm">전체 보기</TextLink>

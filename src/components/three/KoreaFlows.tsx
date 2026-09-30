@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { STATES } from "@/lib/particles/states";
 import { HUB, flowSources, buildArcs, arcPolyline, packetAttributes } from "@/lib/particles/flows";
+import { SOUTH_RINGS, NORTH_RINGS } from "@/lib/particles/targets/korea";
 import { BLUE, CYAN, currentState } from "./ParticleSystem";
 
 const KOREA = STATES.indexOf("ecosystem");
@@ -19,9 +20,26 @@ void main(){
   vec3 p = u * u * aP0 + 2.0 * u * t * aC + t * t * aP1;
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = (38.0 + 46.0 * t) * uPixelRatio / -mv.z;
+  gl_PointSize = (28.0 + 30.0 * t) * uPixelRatio / -mv.z;
   vT = t;
 }`;
+
+const arcVertex = /* glsl */ `
+attribute float aT;
+varying float vT;
+void main(){ vT = aT; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+const arcFragment = /* glsl */ `
+uniform vec3 uColor; uniform float uOpacity;
+varying float vT;
+void main(){ gl_FragColor = vec4(uColor, uOpacity * (0.08 + 0.92 * vT * vT)); }`;
+
+const ringLines = (rings: [number, number][][]) => {
+  const pts: number[] = [];
+  for (const r of rings) for (let i = 1; i < r.length; i++) pts.push(r[i - 1][0], r[i - 1][1], 0.002, r[i][0], r[i][1], 0.002);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(pts), 3));
+  return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: CYAN, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+};
 
 const packetFragment = /* glsl */ `
 uniform vec3 uColor; uniform float uOpacity;
@@ -39,13 +57,23 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
   const group = useRef<THREE.Group>(null);
   const time = useRef(0);
 
-  const { arcLines, packets, packetMat, core, rings } = useMemo(() => {
+  const { arcLines, southLines, northLines, packets, packetMat, core, rings } = useMemo(() => {
     const arcs = buildArcs(flowSources());
     const lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute("position", new THREE.BufferAttribute(arcPolyline(arcs), 3));
-    const arcLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({ color: BLUE, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const segs = 24;
+    lineGeo.setAttribute("position", new THREE.BufferAttribute(arcPolyline(arcs, segs), 3));
+    // 선분 양 끝점의 곡선 위 위치(0=출발, 1=허브)로 밝기를 점점 올린다
+    const aT = new Float32Array(arcs.length * segs * 2);
+    for (let a = 0; a < arcs.length; a++) for (let i = 0; i < segs; i++) { aT[(a * segs + i) * 2] = i / segs; aT[(a * segs + i) * 2 + 1] = (i + 1) / segs; }
+    lineGeo.setAttribute("aT", new THREE.BufferAttribute(aT, 1));
+    const arcLines = new THREE.LineSegments(lineGeo, new THREE.ShaderMaterial({
+      vertexShader: arcVertex, fragmentShader: arcFragment, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: { uColor: { value: BLUE }, uOpacity: { value: 0 } },
+    }));
+    const southLines = ringLines(SOUTH_RINGS);
+    const northLines = ringLines(NORTH_RINGS);
 
-    const attr = packetAttributes(arcs, 5);
+    const attr = packetAttributes(arcs, 7);
     const pg = new THREE.BufferGeometry();
     pg.setAttribute("position", new THREE.BufferAttribute(attr.p0, 3));
     pg.setAttribute("aP0", new THREE.BufferAttribute(attr.p0, 3));
@@ -55,19 +83,19 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
     pg.setAttribute("aSpeed", new THREE.BufferAttribute(attr.speed, 1));
     const packetMat = new THREE.ShaderMaterial({
       vertexShader: packetVertex, fragmentShader: packetFragment, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: { uTime: { value: 0 }, uPixelRatio: { value: 1 }, uColor: { value: CYAN }, uOpacity: { value: 0 } },
+      uniforms: { uTime: { value: 0 }, uPixelRatio: { value: 1 }, uColor: { value: new THREE.Color("#e6f8ff") }, uOpacity: { value: 0 } },
     });
     const packets = new THREE.Points(pg, packetMat);
     packets.frustumCulled = false;
 
-    const core = new THREE.Mesh(new THREE.CircleGeometry(0.07, 32), new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const core = new THREE.Mesh(new THREE.CircleGeometry(0.03, 32), new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
     core.position.set(HUB[0], HUB[1], 0.01);
     const rings = Array.from({ length: RINGS }, () => {
-      const m = new THREE.Mesh(new THREE.RingGeometry(0.94, 1, 64), new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
+      const m = new THREE.Mesh(new THREE.RingGeometry(0.97, 1, 96), new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
       m.position.set(HUB[0], HUB[1], 0.01);
       return m;
     });
-    return { arcLines, packets, packetMat, core, rings };
+    return { arcLines, southLines, northLines, packets, packetMat, core, rings };
   }, []);
 
   useFrame((_, dt) => {
@@ -85,19 +113,23 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
     packetMat.uniforms.uTime.value = t;
     packetMat.uniforms.uPixelRatio.value = gl.getPixelRatio();
     packetMat.uniforms.uOpacity.value = arrive;
-    (arcLines.material as THREE.LineBasicMaterial).opacity = 0.4 * arrive;
+    (arcLines.material as THREE.ShaderMaterial).uniforms.uOpacity.value = 0.95 * arrive;
+    (southLines.material as THREE.LineBasicMaterial).opacity = 0.7 * arrive;
+    (northLines.material as THREE.LineBasicMaterial).opacity = 0.1 * arrive;
     const beat = reducedMotion ? 0.5 : 0.5 + 0.5 * Math.sin(t * 3);
     (core.material as THREE.MeshBasicMaterial).opacity = (0.6 + 0.4 * beat) * arrive;
-    core.scale.setScalar(1 + 0.25 * beat);
+    core.scale.setScalar(1 + 0.3 * beat);
     rings.forEach((r, i) => {
       const ph = reducedMotion ? (i + 0.5) / RINGS : (t * 0.45 + i / RINGS) % 1;
-      r.scale.setScalar(0.08 + ph * 0.55);
+      r.scale.setScalar(0.05 + ph * 0.42);
       (r.material as THREE.MeshBasicMaterial).opacity = (1 - ph) * 0.55 * arrive;
     });
   });
 
   return (
     <group ref={group} visible={false}>
+      <primitive object={northLines} />
+      <primitive object={southLines} />
       <primitive object={arcLines} />
       <primitive object={packets} />
       <primitive object={core} />

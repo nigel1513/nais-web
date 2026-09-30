@@ -2,6 +2,8 @@ import { HOME_SECTIONS, SEED_FACTS, CONVERGENCE_ITEMS } from "@/content/home";
 import { IndexedList } from "@/components/ui/IndexedList";
 import { TextLink } from "@/components/ui/TextLink";
 import { CountUp } from "@/components/ui/CountUp";
+import { ProgramStatus } from "@/components/ui/ProgramStatus";
+import { PROGRAMS, programStatus } from "@/content/pages";
 import { Section } from "./Section";
 
 export function Convergence() {
@@ -10,7 +12,7 @@ export function Convergence() {
     <Section id={s.id} eyebrow={s.eyebrow} title={s.title}
       lead="각 분야의 전문성과 AI를 결합하고, 연구 현장에서 효과를 검증합니다.">
       <div data-reveal>
-        <p className="text-[15px] font-medium text-cyan">모집 중 · 2026 AI 융합연구사업 Seed형</p>
+        <p className="text-[15px] font-medium text-cyan"><ProgramStatus id="seed" variant="label" initial={programStatus(PROGRAMS[0], new Date())} /> · 2026 AI 융합연구사업 Seed형</p>
         <dl className="mt-5 grid grid-cols-3 gap-3 sm:gap-4">
           {SEED_FACTS.map((f) => (
             <div key={f.label}>

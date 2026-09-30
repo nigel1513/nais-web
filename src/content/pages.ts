@@ -53,7 +53,8 @@ export const RESEARCH: ResearchArea[] = [
 export const MOONSHOT_FIELDS = ["첨단바이오", "미래에너지", "피지컬AI", "우주", "소재", "AI과학자", "반도체", "양자"];
 
 export interface Program {
-  id: string; category: string; title: string; summary: string; period: { start: string; end: string; label: string };
+  id: string; category: string; title: string; summary: string;
+  period: { start: string; end: string; label: string }; // start·end는 한국 시간(+09:00) ISO 시각
   facts: { label: string; value: string }[]; details: string[]; source: { label: string; href: string };
 }
 
@@ -61,7 +62,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "seed", category: "공모", title: "2026 NAIS AI 융합연구사업 (Seed형)",
     summary: "출연연이 주관하고 산·학·연 기관과 함께 수행하는 과학 AI 융합연구 과제를 지원합니다.",
-    period: { start: "2026-09-29", end: "2026-10-20", label: "2026.9.29 – 10.20 18:00" },
+    period: { start: "2026-09-29T00:00:00+09:00", end: "2026-10-20T18:00:00+09:00", label: "2026.9.29 – 10.20 18:00" },
     facts: [
       { label: "과제당 지원", value: "최대 2억 원" },
       { label: "선정 규모", value: "약 15개 과제" },
@@ -79,7 +80,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "hackathon", category: "행사", title: "2026 NAIS AI 해커톤",
     summary: "연구개발 현장에 특화된 AI 에이전트를 주제로 한 해커톤입니다.",
-    period: { start: "2026-09-30", end: "2026-10-01", label: "본선 2026.9.30 – 10.1" },
+    period: { start: "2026-09-30T00:00:00+09:00", end: "2026-10-02T00:00:00+09:00", label: "본선 2026.9.30 – 10.1" },
     facts: [
       { label: "주제", value: "R&D 특화 AI 에이전트" },
       { label: "본선", value: "AI4Sci Korea 2026" },
@@ -123,7 +124,10 @@ export const ARTICLES: Article[] = [
   },
 ];
 
-export const programStatus = (p: Program, today = new Date("2026-09-30")) => {
-  const s = new Date(p.period.start), e = new Date(p.period.end + "T23:59:59");
-  return today < s ? "예정" : today > e ? "마감" : "진행 중";
-};
+export type ProgramState = "예정" | "진행 중" | "마감";
+
+/** 보는 사람의 현재 시각(now)으로 상태를 정한다. 마감된 사업도 목록에서 빠지지 않고 '마감'으로 남는다. */
+export function programStatus(p: Program, now: Date): ProgramState {
+  const s = new Date(p.period.start), e = new Date(p.period.end);
+  return now < s ? "예정" : now >= e ? "마감" : "진행 중";
+}

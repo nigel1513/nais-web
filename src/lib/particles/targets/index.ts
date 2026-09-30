@@ -1,10 +1,12 @@
 import { sphere } from "./sphere";
 import { mesh } from "./mesh";
+import { convergence } from "./convergence";
 import { loop } from "./loop";
+import { moonshot } from "./moonshot";
+import { korea } from "./korea";
 
-/** STATES 순서: sphere, mesh, convergence, loop, moonshot, korea, sphereFinal */
+/** STATES 순서: sphere, mesh, convergence, loop, moonshot, korea, sphereFinal(같은 구 좌표, 설정만 다름) */
 export function buildAllTargets(count: number): Float32Array[] {
   const s = sphere(count);
-  // Task 7에서 convergence·moonshot·korea로 교체한다(프로토타입 단계 임시값).
-  return [s, mesh(count), s, loop(count), s, s, s];
+  return [s, mesh(count), convergence(count), loop(count), moonshot(count), korea(count), s];
 }

@@ -4,8 +4,9 @@ import { useMemo } from "react";
 import { buildAllTargets } from "@/lib/particles/targets";
 import { ParticleSystem } from "./ParticleSystem";
 import { ParticleLines } from "./ParticleLines";
+import { ProjectedLabels } from "./ProjectedLabels";
 
-export default function ParticleScene({ count, reducedMotion }: { count: number; reducedMotion: boolean }) {
+export default function ParticleScene({ count, reducedMotion, labelContainer }: { count: number; reducedMotion: boolean; labelContainer: HTMLDivElement | null }) {
   const targets = useMemo(() => buildAllTargets(count), [count]);
   return (
     <Canvas
@@ -16,6 +17,7 @@ export default function ParticleScene({ count, reducedMotion }: { count: number;
     >
       <ParticleSystem targets={targets} reducedMotion={reducedMotion} />
       <ParticleLines targets={targets} reducedMotion={reducedMotion} />
+      {labelContainer && <ProjectedLabels container={labelContainer} reducedMotion={reducedMotion} />}
     </Canvas>
   );
 }

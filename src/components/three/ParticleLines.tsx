@@ -31,7 +31,7 @@ export function ParticleLines({ targets, reducedMotion }: { targets: Float32Arra
     if (!geo) { material.uniforms.uOpacity.value = 0; return; }
     if (lines.geometry !== geo) lines.geometry = geo;
     const arrive = s.from === s.to ? 1 : THREE.MathUtils.smoothstep(s.t, 0.85, 1);
-    material.uniforms.uOpacity.value = 0.18 * cfg.brightness * arrive;
+    material.uniforms.uOpacity.value = 0.3 * cfg.brightness * arrive;
     material.uniforms.uSpin.value = reducedMotion ? 0 : cfg.spin;
     material.uniforms.uTilt.value = cfg.tilt;
     const particles = scene.getObjectByName("particles");

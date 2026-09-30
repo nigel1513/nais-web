@@ -1,7 +1,7 @@
 import { mulberry32, clamp3 } from "../rng";
 import type { Vec3 } from "../transform";
 
-const W = 4.4, D = 2.8, COLS = 11, ROWS = 7; // XZ 평면 격자 (tilt로 카메라를 향하게 함)
+const W = 3.6, D = 2.4, COLS = 11, ROWS = 7; // XZ 평면 격자 (tilt로 카메라를 향하게 함)
 const gx = (c: number) => -W / 2 + (c / (COLS - 1)) * W;
 const gz = (r: number) => -D / 2 + (r / (ROWS - 1)) * D;
 

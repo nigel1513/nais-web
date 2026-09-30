@@ -18,6 +18,7 @@ function hasWebGL(): boolean {
 export function ParticleLayer({ sectionIds }: { sectionIds: readonly string[] }) {
   useSectionScroll(sectionIds);
   const [cfg, setCfg] = useState<{ count: number; reduced: boolean } | null>(null);
+  const [labelEl, setLabelEl] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -31,8 +32,11 @@ export function ParticleLayer({ sectionIds }: { sectionIds: readonly string[] })
 
   if (!cfg) return null;
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
-      <ParticleScene count={cfg.count} reducedMotion={cfg.reduced} />
-    </div>
+    <>
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
+        <ParticleScene count={cfg.count} reducedMotion={cfg.reduced} labelContainer={labelEl} />
+      </div>
+      <div ref={setLabelEl} aria-hidden="true" className="pointer-events-none fixed inset-0 z-[5] hidden lg:block" />
+    </>
   );
 }

@@ -1,28 +1,50 @@
-import Link from "next/link";
-import { HOME_SECTIONS, NEWS } from "@/content/home";
+import { HOME_SECTIONS, NEWS, NEXT_STEPS } from "@/content/home";
+import { TextLink } from "@/components/ui/TextLink";
 import { Section } from "./Section";
 
-const fmt = (d: string) => d.replaceAll("-", ".");
+const md = (d: string) => d.slice(5).replace("-", ".");
+
+function NextSteps() {
+  return (
+    <div className="relative z-10 mx-auto max-w-7xl pb-28 pt-8">
+      <p className="eyebrow">Next Steps</p>
+      <div className="mt-8 grid gap-12 md:grid-cols-3">
+        {NEXT_STEPS.map((n) => (
+          <div key={n.title}>
+            <h3 className="text-[1.5rem] font-semibold leading-tight tracking-[-0.025em]">{n.title}</h3>
+            <p className="mt-3 text-[15px] leading-relaxed text-muted">{n.body}</p>
+            <TextLink href={n.href} className="mt-5">{n.link}</TextLink>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function News() {
   const s = HOME_SECTIONS[6];
   return (
-    <Section id={s.id} eyebrow={s.eyebrow} title={s.title}>
-      <h3 data-reveal className="font-mono text-xs tracking-widest text-muted">Latest News</h3>
-      <ul className="divide-y divide-line border-y border-line">
+    <Section id={s.id} eyebrow={s.eyebrow} title={s.title} after={<NextSteps />}>
+      <div data-reveal className="flex items-baseline justify-between">
+        <h3 className="text-[13px] text-muted">최신 소식</h3>
+        <TextLink href="/news/" className="text-sm">전체 보기</TextLink>
+      </div>
+      <div className="space-y-8">
         {NEWS.map((n) => (
-          <li data-reveal key={n.title} className="grid gap-1 py-4 sm:grid-cols-[7rem_1fr]">
-            <time dateTime={n.date} className="font-mono text-xs text-cyan">{fmt(n.date)}</time>
+          <article data-reveal key={n.title} className="group grid grid-cols-[5.5rem_1fr] gap-x-5">
             <div>
-              <p className="font-medium">{n.href ? <Link className="hover:underline" href={n.href}>{n.title}</Link> : n.title}</p>
-              <p className="text-sm text-muted">{n.detail}</p>
+              <time dateTime={n.date} className="block font-mono text-[1.6rem] font-light leading-none tabular-nums text-fg/30 transition-colors group-hover:text-cyan">{md(n.date)}</time>
+              <p className="mt-2 text-[13px] text-cyan">{n.category}</p>
             </div>
-          </li>
+            <div>
+              <h4 className="text-[1.2rem] font-semibold leading-snug tracking-[-0.02em]">
+                <a href={n.href} className="transition-colors hover:text-cyan">{n.title}</a>
+              </h4>
+              <p className="mt-1.5 text-[15px] leading-relaxed text-muted">{n.detail}</p>
+            </div>
+          </article>
         ))}
-      </ul>
-      <Link data-reveal href="/careers/" className="inline-flex rounded-full bg-cyan px-5 py-2.5 text-sm font-semibold text-ink-950 hover:bg-cyan/90">
-        Join NAIS →
-      </Link>
+      </div>
     </Section>
   );
 }

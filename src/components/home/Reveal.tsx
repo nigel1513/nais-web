@@ -10,10 +10,13 @@ export function Reveal({ children, className, enabled = true }: { children: Reac
     const items = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
     const rect = root.getBoundingClientRect();
     if (rect.top < window.innerHeight * 0.75) return; // 이미 화면에 들어온 섹션은 그대로 둔다
+    const words = Array.from(root.querySelectorAll<HTMLElement>("[data-words]"));
     items.forEach((el, i) => { el.classList.add("reveal-pending"); el.style.transitionDelay = `${i * 80}ms`; });
+    words.forEach((el) => el.classList.add("words-pending"));
     const io = new IntersectionObserver((entries) => {
       if (!entries.some((e) => e.isIntersecting)) return;
       items.forEach((el) => el.classList.remove("reveal-pending"));
+      words.forEach((el) => el.classList.remove("words-pending"));
       io.disconnect();
     }, { rootMargin: "0px 0px -25% 0px" });
     io.observe(root);

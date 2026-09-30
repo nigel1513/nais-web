@@ -16,10 +16,17 @@ export const SITE = {
     { label: "News", href: "/news/" },
     { label: "Careers", href: "/careers/" },
   ],
-  footerLinks: [
-    { label: "Contact", href: "/about/" },
-    { label: "Privacy", href: "/about/" },
-    { label: "Accessibility", href: "/about/" },
-    { label: "Sitemap", href: "/sitemap.xml" },
+  footerGroups: [
+    { title: "센터 소개", links: [{ label: "조직도", href: "/about/" }, { label: "부서별 담당업무", href: "/about/#unit-center" }] },
+    { title: "연구", links: [
+      { label: "AI 플랫폼", href: "/#platform" }, { label: "AI 융합", href: "/#convergence" },
+      { label: "자율형 AI 과학자", href: "/#autonomous" }, { label: "K-문샷", href: "/#moonshot" },
+    ] },
+    { title: "사업·소식", links: [{ label: "사업 공고", href: "/programs/" }, { label: "뉴스", href: "/news/" }] },
+    { title: "채용", links: [{ label: "채용 안내", href: "/careers/" }] },
+  ],
+  legalLinks: [
+    { label: "개인정보처리방침", href: "/privacy/" },
+    { label: "사이트맵", href: "/sitemap.xml" },
   ],
 } as const;

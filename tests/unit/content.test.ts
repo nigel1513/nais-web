@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { HOME_SECTIONS, NEWS, MISSIONS, PLATFORM_CARDS, AUTONOMOUS_POINTS } from "@/content/home";
+import { HOME_SECTIONS, NEWS, MISSIONS, PLATFORM_ITEMS } from "@/content/home";
 import { INSTITUTES } from "@/content/institutes";
 import outline from "@/content/korea-outline.json";
 
@@ -12,13 +12,16 @@ describe("home content", () => {
     dates.forEach((d) => expect(d).toMatch(/^\d{4}-\d{2}-\d{2}$/));
     expect([...dates].sort().reverse()).toEqual(dates);
   });
-  test("missions are placeholders only", () => {
+  test("missions: 11 official names from the NST org page, 12th pending", () => {
     expect(MISSIONS).toHaveLength(12);
-    MISSIONS.forEach((m, i) => expect(m).toBe(`Mission ${String(i + 1).padStart(2, "0")}`));
+    expect(MISSIONS.slice(0, 11).map((m) => m.name)).toEqual(["AI과학자", "반도체", "신약", "태양전지", "핵융합", "휴머노이드", "SMR선박", "소재", "양자", "우주", "BCI"]);
+    expect(MISSIONS[11].name).toBe("명칭 확인 중");
   });
-  test("platform has five cards", () => expect(PLATFORM_CARDS).toHaveLength(5));
-  test("autonomous cards carry only confirmed items (consortium claim is unverified)", () => {
-    expect(AUTONOMOUS_POINTS.map((c) => c.label)).toEqual(["UNIT", "PLATFORM"]);
+  test("platform lists the five official AI플랫폼팀 duties", () => {
+    expect(PLATFORM_ITEMS.map((i) => i.title)).toEqual(["AI-OS", "AI 플랫폼", "GPU 자원", "AI-ready 데이터", "AI 마켓플레이스"]);
+  });
+  test("home copy drops the unverified consortium claim", () => {
+    expect(JSON.stringify(PLATFORM_ITEMS) + JSON.stringify(NEWS)).not.toContain("컨소시엄");
   });
 });
 

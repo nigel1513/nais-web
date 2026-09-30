@@ -14,15 +14,14 @@ test("all seven sections are labelled regions in order", async ({ page }) => {
 
 test("What We Do wording, no '4대 추진과제'", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("What We Do")).toBeVisible();
+  await expect(page.locator("#platform").getByText(/What We Do/)).toBeVisible();
   await expect(page.locator("body")).not.toContainText("4대 추진과제");
 });
 
 test("news lists three real items and careers CTA", async ({ page }) => {
   await page.goto("/");
-  const items = page.locator("#news li");
-  await expect(items).toHaveCount(3);
-  await expect(page.getByRole("link", { name: /Join NAIS/ })).toHaveAttribute("href", "/careers/");
+  await expect(page.locator("#news article")).toHaveCount(3);
+  await expect(page.locator("#news").getByRole("link", { name: "채용 안내" })).toHaveAttribute("href", "/careers/");
 });
 
 test("no horizontal overflow", async ({ page }) => {

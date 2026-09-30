@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-for (const [path, title] of [["/about/", "About"], ["/research/", "Research"], ["/programs/", "Programs"], ["/news/", "News"], ["/careers/", "Careers"]]) {
+for (const [path, title] of [["/research/", "Research"], ["/programs/", "Programs"], ["/news/", "News"], ["/careers/", "Careers"]]) {
   test(`${path} renders coming-soon page`, async ({ page }) => {
     const res = await page.goto(path);
     expect(res?.status()).toBe(200);

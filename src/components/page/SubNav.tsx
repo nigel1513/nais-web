@@ -7,7 +7,7 @@ export function SubNav({ label, items, current }: { label: string; items: { labe
       <ul className="container-site flex gap-7 overflow-x-auto text-[15px]">
         {items.map((i) => (
           <li key={i.href} className="shrink-0">
-            <SmartLink href={i.href} className={`block py-4 transition-colors ${current === i.href ? "font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-cyan)]" : "text-fg/60 hover:text-fg"}`}>
+            <SmartLink href={i.href} ariaCurrent={current === i.href ? "page" : undefined} className={`block py-4 transition-colors ${current === i.href ? "font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-cyan)]" : "text-fg/60 hover:text-fg"}`}>
               {i.label}
             </SmartLink>
           </li>
@@ -19,7 +19,7 @@ export function SubNav({ label, items, current }: { label: string; items: { labe
 
 export const ABOUT_NAV = [
   { label: "센터 소개", href: "/about/" },
-  { label: "연혁", href: "/about/#history" },
+  { label: "연혁", href: "/about/history/" },
   { label: "조직도", href: "/about/organization/" },
-  { label: "문의", href: "/about/#contact" },
+  { label: "문의", href: "/about/contact/" },
 ];

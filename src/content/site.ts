@@ -20,7 +20,7 @@ export const SITE = {
     { label: "Careers", href: RECRUIT_URL },
   ],
   footerGroups: [
-    { title: "센터 소개", links: [{ label: "센터 소개", href: "/about/" }, { label: "연혁", href: "/about/#history" }, { label: "조직도", href: "/about/organization/" }] },
+    { title: "센터 소개", links: [{ label: "센터 소개", href: "/about/" }, { label: "연혁", href: "/about/history/" }, { label: "조직도", href: "/about/organization/" }, { label: "문의", href: "/about/contact/" }] },
     { title: "연구", links: [
       { label: "과학AI 통합플랫폼", href: "/research/#platform" }, { label: "과학AI 융합", href: "/research/#convergence" },
       { label: "자율형 AI 과학자", href: "/research/#autonomous" }, { label: "K-문샷", href: "/research/#moonshot" },

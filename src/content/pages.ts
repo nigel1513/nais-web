@@ -18,9 +18,7 @@ export const HISTORY: { date: string; text: string }[] = [
   { date: "2026.02", text: "과학기술×AI 국가전략(K-문샷)에서 국가과학AI연구센터를 자원 통합 플랫폼·협업 허브로 지정" },
   { date: "2026.04", text: "운영단 구성" },
   { date: "2026.05", text: "국가과학AI연구센터 업무 개시" },
-  { date: "2026.07", text: "제2차 정규직 채용" },
-  { date: "2026.08", text: "NAIS AI 해커톤 참가자 모집" },
-  { date: "2026.09", text: "제3차 정규직 채용 공고, 2026 NAIS AI 융합연구사업(Seed형) 공모" },
+  { date: "2026.09", text: "첫 사업 'NAIS AI 융합연구사업(Seed형)' 공모, 첫 NAIS AI 해커톤 개최" },
 ];
 
 export interface ResearchArea { id: string; eyebrow: string; title: string; lead: string; owner: string; ownerId: string; points: string[] }

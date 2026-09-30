@@ -21,7 +21,7 @@ for (const width of [1440, 1024, 390]) {
 }
 
 
-for (const path of ["/about/", "/about/organization/", "/research/", "/programs/", "/news/", "/news/seed-call/"]) {
+for (const path of ["/about/", "/about/history/", "/about/organization/", "/about/contact/", "/research/", "/programs/", "/news/", "/news/seed-call/"]) {
   test(`${path} title shares the header left edge`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(path);

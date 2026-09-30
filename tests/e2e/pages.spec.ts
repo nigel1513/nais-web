@@ -1,12 +1,32 @@
 import { expect, test } from "@playwright/test";
 
-test("about: overview, history timeline and contact", async ({ page }) => {
-  await page.goto("/about/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("센터 소개");
-  await expect(page.getByRole("navigation", { name: "센터 소개 메뉴" }).getByRole("link", { name: "조직도" })).toHaveAttribute("href", "/about/organization/");
-  const history = page.locator("#history li");
-  expect(await history.count()).toBeGreaterThanOrEqual(8);
-  await expect(page.locator("#history")).toContainText("2026.05");
+const ABOUT_PAGES = [
+  { path: "/about/", title: "센터 소개" },
+  { path: "/about/history/", title: "연혁" },
+  { path: "/about/organization/", title: "조직도" },
+  { path: "/about/contact/", title: "문의" },
+];
+
+for (const p of ABOUT_PAGES) {
+  test(`${p.path} is its own page with the shared about menu`, async ({ page }) => {
+    await page.goto(p.path);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(p.title);
+    const nav = page.getByRole("navigation", { name: "센터 소개 메뉴" });
+    for (const q of ABOUT_PAGES) await expect(nav.getByRole("link", { name: q.title, exact: true })).toHaveAttribute("href", q.path);
+    await expect(nav.getByRole("link", { name: p.title, exact: true })).toHaveAttribute("aria-current", "page");
+  });
+}
+
+test("history lists milestones only, no recruitment notices", async ({ page }) => {
+  await page.goto("/about/history/");
+  const items = page.locator("main ol li");
+  expect(await items.count()).toBeGreaterThanOrEqual(6);
+  await expect(page.locator("main")).toContainText("2026.05");
+  await expect(page.locator("main")).not.toContainText("채용");
+});
+
+test("contact page shows the contact person", async ({ page }) => {
+  await page.goto("/about/contact/");
   await expect(page.locator("main")).toContainText("ygyu@nst.re.kr");
 });
 
@@ -61,5 +81,5 @@ test("privacy page and sitemap", async ({ page, request }) => {
   expect(res?.status()).toBe(200);
   const xml = await (await request.get("/sitemap.xml")).text();
   expect(xml).toContain("<urlset");
-  for (const p of ["/about/", "/about/organization/", "/research/", "/programs/", "/news/"]) expect(xml).toContain(p);
+  for (const p of ["/about/", "/about/history/", "/about/organization/", "/about/contact/", "/research/", "/programs/", "/news/"]) expect(xml).toContain(p);
 });

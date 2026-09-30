@@ -21,7 +21,7 @@ test("What We Do wording, no '4대 추진과제'", async ({ page }) => {
 test("news lists three real items and careers CTA", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#news article")).toHaveCount(3);
-  await expect(page.locator("#news").getByRole("link", { name: /채용/ })).toHaveAttribute("href", "https://nst.fairy.im/");
+  await expect(page.locator("#news").getByRole("link", { name: /채용/ })).toHaveAttribute("href", "/news/recruit-3rd/");
 });
 
 test("no horizontal overflow", async ({ page }) => {

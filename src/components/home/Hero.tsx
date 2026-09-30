@@ -11,7 +11,7 @@ export function Hero() {
         <a href="#platform" className="inline-flex h-11 items-center rounded-full bg-fg px-6 text-[15px] font-semibold text-ink-950 transition-colors hover:bg-cyan">
           NAIS 둘러보기
         </a>
-        <TextLink href="/about/">조직도</TextLink>
+        <TextLink href="/about/">센터 소개</TextLink>
       </div>
       <p className="text-[1.35rem] font-medium leading-snug tracking-[-0.02em] text-fg/40">{SITE.vision}</p>
     </Section>

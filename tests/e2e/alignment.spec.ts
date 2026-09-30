@@ -20,10 +20,13 @@ for (const width of [1440, 1024, 390]) {
   });
 }
 
-test("organization page shares the same left edge as the header", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/about/");
-  const header = await page.locator("header a[aria-label*='홈']").evaluate((el) => Math.round(el.getBoundingClientRect().left));
-  const title = await page.locator("#organization .eyebrow").evaluate((el) => Math.round(el.getBoundingClientRect().left));
-  expect(title).toBe(header);
-});
+
+for (const path of ["/about/", "/about/organization/", "/research/", "/programs/", "/news/", "/news/seed-call/"]) {
+  test(`${path} title shares the header left edge`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(path);
+    const header = await page.locator("header a[aria-label*='홈']").evaluate((el) => Math.round(el.getBoundingClientRect().left));
+    const title = await page.locator("main h1").evaluate((el) => Math.round(el.getBoundingClientRect().left));
+    expect(title).toBe(header);
+  });
+}

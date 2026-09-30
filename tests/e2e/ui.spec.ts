@@ -67,7 +67,7 @@ test("03 autonomous shows only animated English stages", async ({ page }) => {
 });
 
 test("no placeholder wording anywhere on home or organization", async ({ page }) => {
-  for (const path of ["/", "/about/"]) {
+  for (const path of ["/", "/about/", "/about/organization/", "/research/", "/programs/", "/news/"]) {
     await page.goto(path);
     await expect(page.locator("main")).not.toContainText(/명칭 확인 중|구성 중|공개되지 않았|준비 중/);
   }
@@ -110,10 +110,15 @@ test("ecosystem list uses the same official names and order as the institute CI 
 
 test("every careers link goes to the NST recruitment site in a new tab", async ({ page, isMobile }) => {
   await page.goto("/");
-  const links = [page.locator("footer").getByRole("link", { name: "채용 안내" }), page.locator("#news").getByRole("link", { name: /채용/ })];
+  const links = [page.locator("footer").getByRole("link", { name: "채용 안내" })];
   if (!isMobile) links.push(page.getByRole("navigation", { name: "주 메뉴" }).getByRole("link", { name: "Careers" }));
   for (const l of links) {
     await expect(l).toHaveAttribute("href", "https://nst.fairy.im/");
     await expect(l).toHaveAttribute("target", "_blank");
   }
+  // 소식의 채용 공고는 상세 페이지를 거쳐 채용 사이트로 이어진다
+  await page.goto("/news/recruit-3rd/");
+  const go = page.getByRole("link", { name: "채용 사이트 바로가기" });
+  await expect(go).toHaveAttribute("href", "https://nst.fairy.im/");
+  await expect(go).toHaveAttribute("target", "_blank");
 });

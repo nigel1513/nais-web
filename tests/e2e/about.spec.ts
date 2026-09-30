@@ -1,9 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 test("organization page shows only the chart until a unit is chosen", async ({ page }) => {
-  await page.goto("/about/");
+  await page.goto("/about/organization/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("조직도");
-  await expect(page.locator("main")).not.toContainText("AI로 과학을, 과학으로 미래를");
   await expect(page.locator("main table")).toHaveCount(0);
   for (const name of ["국가과학AI연구센터", "K-문샷추진지원단", "과학AI본부", "자율형AI과학자연구단", "경영전략부", "연구AX팀", "AI과학자팀", "AI자원팀"]) {
     await expect(page.locator("#organization").getByRole("button", { name, exact: true })).toBeVisible();
@@ -11,7 +10,7 @@ test("organization page shows only the chart until a unit is chosen", async ({ p
 });
 
 test("choosing a team opens its staff table (role, duties, phone; no names)", async ({ page }) => {
-  await page.goto("/about/");
+  await page.goto("/about/organization/");
   const btn = page.locator("#organization").getByRole("button", { name: "연구AX팀", exact: true });
   await btn.click();
   await expect(btn).toHaveAttribute("aria-expanded", "true");
@@ -25,7 +24,7 @@ test("choosing a team opens its staff table (role, duties, phone; no names)", as
 });
 
 test("a unit without published staff opens its name and parent, without a table", async ({ page }) => {
-  await page.goto("/about/");
+  await page.goto("/about/organization/");
   await page.locator("#organization").getByRole("button", { name: "AI자원팀", exact: true }).click();
   await expect(page.locator("#unit-panel h2")).toHaveText("AI자원팀");
   await expect(page.locator("#unit-panel")).toContainText("과학AI통합플랫폼운영단");
@@ -33,17 +32,27 @@ test("a unit without published staff opens its name and parent, without a table"
 });
 
 test("deep link opens that unit's panel", async ({ page }) => {
-  await page.goto("/about/#unit-platform-team");
+  await page.goto("/about/organization/#unit-platform-team");
   await expect(page.locator("#unit-panel")).toContainText("AI-OS 설계 및 구축");
 });
 
 test("closing the panel returns to the chart only", async ({ page }) => {
-  await page.goto("/about/#unit-ax-team");
+  await page.goto("/about/organization/#unit-ax-team");
   await page.getByRole("button", { name: "닫기" }).click();
   await expect(page.locator("main table")).toHaveCount(0);
 });
 
 test("organization page has no dated source note", async ({ page }) => {
-  await page.goto("/about/");
+  await page.goto("/about/organization/");
   await expect(page.locator("main")).not.toContainText("2026년 9월 기준");
+});
+
+test("opened unit panel is not hidden under the sticky header and sub-navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/about/organization/");
+  await page.locator("#organization").getByRole("button", { name: "연구AX팀", exact: true }).click();
+  await page.waitForTimeout(1200);
+  const close = await page.getByRole("button", { name: "닫기" }).boundingBox();
+  const nav = await page.getByRole("navigation", { name: "센터 소개 메뉴" }).boundingBox();
+  expect(close!.y).toBeGreaterThan(nav!.y + nav!.height);
 });

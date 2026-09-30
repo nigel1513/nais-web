@@ -1,4 +1,4 @@
-import { RECRUIT_URL } from "./site";
+import { ARTICLES } from "./pages";
 
 // 출처: reports/NAIS 국가과학AI연구센터 조사.md. [계획] 항목은 status: "planned"로 표시한다.
 export const HOME_SECTIONS = [
@@ -53,8 +53,5 @@ export const MISSIONS: { code: string; name: string }[] = [
 
 export const ECOSYSTEM_BODY = "출연연의 도메인 전문성부터 대학·산업계의 AI 역량까지.";
 
-export const NEWS: { date: string; category: string; title: string; detail: string; href: string }[] = [
-  { date: "2026-09-30", category: "행사", title: "NAIS AI 해커톤 본선", detail: "R&D 특화 AI 에이전트를 주제로, 성과 작성·연구행정 트랙을 포함합니다.", href: "/news/" },
-  { date: "2026-09-29", category: "공모", title: "2026 NAIS AI 융합연구사업 Seed형 공모", detail: "과제당 최대 2억 원, 10월 20일까지 접수합니다.", href: "/programs/" },
-  { date: "2026-09-23", category: "채용", title: "2026년도 NAIS 제3차 정규직 채용", detail: "연구직·연구기술직 29명, 10월 12일 14:00까지 접수합니다.", href: RECRUIT_URL },
-];
+// 홈의 최신 소식은 소식 페이지 기사 중 최근 3건
+export const NEWS = ARTICLES.slice(0, 3).map((a) => ({ date: a.date, category: a.category, title: a.title, detail: a.summary, href: `/news/${a.slug}/` }));

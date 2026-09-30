@@ -15,6 +15,21 @@ test("webgl-off: content readable, no canvas, no errors", async ({ baseURL }) =>
   await browser.close();
 });
 
+test("webgl1-only: renderer needs WebGL2, page must still render all content", async ({ baseURL }) => {
+  const browser = await chromium.launch({ args: ["--disable-webgl2"] });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(baseURL + "/");
+  await page.waitForTimeout(1500);
+  for (const id of ["hero", "platform", "convergence", "autonomous", "moonshot", "ecosystem", "news"]) {
+    await expect(page.locator(`#${id}-title`)).toBeVisible();
+  }
+  await expect(page.locator("html")).toHaveAttribute("data-webgl", "off");
+  expect(errors).toEqual([]);
+  await browser.close();
+});
+
 test("deep-link: /#moonshot resolves straight to state 4", async ({ page }) => {
   await page.goto("/#moonshot");
   await page.waitForTimeout(400);

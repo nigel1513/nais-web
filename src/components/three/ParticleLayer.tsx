@@ -6,13 +6,16 @@ import { particleCount } from "@/lib/particles/count";
 import { buildAllTargets } from "@/lib/particles/targets";
 import { useSectionScroll } from "@/lib/scroll/useSectionScroll";
 import { particleStore } from "@/lib/scroll/store";
+import { SceneBoundary } from "./SceneBoundary";
 
 const ParticleScene = dynamic(() => import("./ParticleScene"), { ssr: false });
 
-function hasWebGL(): boolean {
+/** three 0.186 렌더러는 WebGL2만 지원한다. 검사용 컨텍스트는 바로 해제해 컨텍스트 한도를 쓰지 않는다. */
+function hasWebGL2(): boolean {
   try {
-    const c = document.createElement("canvas");
-    return !!(c.getContext("webgl2") || c.getContext("webgl"));
+    const gl = document.createElement("canvas").getContext("webgl2");
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+    return !!gl;
   } catch { return false; }
 }
 
@@ -23,7 +26,7 @@ export function ParticleLayer({ sectionIds }: { sectionIds: readonly string[] })
 
   useEffect(() => {
     const root = document.documentElement;
-    if (!hasWebGL()) { root.dataset.webgl = "off"; return; }
+    if (!hasWebGL2()) { root.dataset.webgl = "off"; return; }
     root.dataset.webgl = "on";
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const count = particleCount({ width: window.innerWidth, cores: navigator.hardwareConcurrency, reducedMotion: reduced });
@@ -50,7 +53,9 @@ export function ParticleLayer({ sectionIds }: { sectionIds: readonly string[] })
   return (
     <>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
-        <ParticleScene targets={cfg.targets} reducedMotion={cfg.reduced} labelContainer={labelEl} />
+        <SceneBoundary>
+          <ParticleScene targets={cfg.targets} reducedMotion={cfg.reduced} labelContainer={labelEl} />
+        </SceneBoundary>
       </div>
       <div ref={setLabelEl} aria-hidden="true" className="pointer-events-none fixed inset-0 z-[5] hidden lg:block" />
     </>

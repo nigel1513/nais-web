@@ -24,3 +24,12 @@ test("header navigation lists five sections", async ({ page, isMobile }) => {
     await expect(nav.getByRole("link", { name })).toBeVisible();
   }
 });
+
+test("home loads without console errors (e.g. prefetch 404s)", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+  await page.goto("/");
+  await page.locator("footer").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1500);
+  expect(errors).toEqual([]);
+});

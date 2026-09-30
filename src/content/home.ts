@@ -33,7 +33,6 @@ export const LOOP_STAGES = ["질문", "탐색", "가설", "실험", "분석", "�
 export const AUTONOMOUS_POINTS: Card[] = [
   { label: "UNIT", title: "자율형과학시스템연구단", body: "AI가 가설을 세우고 실험을 설계·분석하는 자율형 과학 시스템을 연구합니다." },
   { label: "PLATFORM", title: "AI 과학자 플랫폼", body: "연구자가 AI 과학자와 함께 연구하는 플랫폼을 베타로 준비합니다.", status: "planned" },
-  { label: "LAB", title: "자율실험실 컨소시엄", body: "한국기초과학지원연구원과 함께 자율실험실 컨소시엄 공동 사무국을 맡습니다." },
 ];
 
 export const MOONSHOT_BODY =

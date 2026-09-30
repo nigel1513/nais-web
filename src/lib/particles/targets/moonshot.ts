@@ -1,7 +1,7 @@
 import { mulberry32, clamp3 } from "../rng";
 import type { Vec3 } from "../transform";
 
-const RING = 2.1;
+const RING = 1.75;
 export const MOONSHOT_NODES: Vec3[] = Array.from({ length: 12 }, (_, i) => {
   const a = (i / 12) * Math.PI * 2;
   return [Math.cos(a) * RING, 0, Math.sin(a) * RING];

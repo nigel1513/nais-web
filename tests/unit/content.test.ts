@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { HOME_SECTIONS, NEWS, MISSIONS, PLATFORM_CARDS } from "@/content/home";
+import { HOME_SECTIONS, NEWS, MISSIONS, PLATFORM_CARDS, AUTONOMOUS_POINTS } from "@/content/home";
 import { INSTITUTES } from "@/content/institutes";
 import outline from "@/content/korea-outline.json";
 
@@ -17,6 +17,9 @@ describe("home content", () => {
     MISSIONS.forEach((m, i) => expect(m).toBe(`Mission ${String(i + 1).padStart(2, "0")}`));
   });
   test("platform has five cards", () => expect(PLATFORM_CARDS).toHaveLength(5));
+  test("autonomous cards carry only confirmed items (consortium claim is unverified)", () => {
+    expect(AUTONOMOUS_POINTS.map((c) => c.label)).toEqual(["UNIT", "PLATFORM"]);
+  });
 });
 
 describe("geo data", () => {

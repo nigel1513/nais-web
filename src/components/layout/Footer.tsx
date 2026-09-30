@@ -15,7 +15,14 @@ export function Footer() {
           {SITE.nav.map((l) => (<li key={l.href}><Link className="text-muted hover:text-fg" href={l.href}>{l.label}</Link></li>))}
         </ul>
         <ul className="space-y-2 text-sm">
-          {SITE.footerLinks.map((l) => (<li key={l.label}><Link className="text-muted hover:text-fg" href={l.href}>{l.label}</Link></li>))}
+          {SITE.footerLinks.map((l) => (
+            <li key={l.label}>
+              {/* sitemap.xml 같은 파일은 라우트가 아니므로 Link 프리페치를 쓰지 않는다 */}
+              {l.href.endsWith(".xml")
+                ? <a className="text-muted hover:text-fg" href={l.href}>{l.label}</a>
+                : <Link className="text-muted hover:text-fg" href={l.href}>{l.label}</Link>}
+            </li>
+          ))}
         </ul>
       </div>
     </footer>

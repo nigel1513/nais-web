@@ -2,7 +2,8 @@ import { describe, expect, test } from "vitest";
 import { korea, koreaDotGrid, insideSouth, insideNorth, DOT_SPACING, NORTH_RINGS } from "@/lib/particles/targets/korea";
 import { project } from "@/lib/particles/geo";
 import { HUB } from "@/lib/particles/flows";
-import { HUB_LABELS } from "@/lib/particles/hub";
+import { HUB_LABELS, MAP_MARKERS } from "@/lib/particles/hub";
+import { INSTITUTES } from "@/content/institutes";
 import outline from "@/content/korea-outline.json";
 
 describe("Korea dot-matrix map", () => {
@@ -41,11 +42,19 @@ describe("Korea dot-matrix map", () => {
   });
 });
 
-test("map labels: NAIS hub with the Daedeok count, plus city names", () => {
+test("map shows every 소관 연구기관: hub label counts all 25 and each code is labelled", () => {
   const eco = HUB_LABELS.filter((l) => l.layer === "ecosystem").map((l) => l.text);
-  const cities = HUB_LABELS.filter((l) => l.layer === "city").map((l) => l.text);
-  expect(eco).toHaveLength(1);
-  expect(eco[0]).toMatch(/^NAIS · 대덕 \d+개 기관$/);
-  for (const c of ["서울", "창원", "광주"]) expect(cities).toContain(c);
-  expect(cities).not.toContain("대전");
+  const inst = HUB_LABELS.filter((l) => l.layer === "institute" || l.layer === "callout").map((l) => l.text).join(" · ");
+  expect(eco).toEqual([`NAIS · 소관 연구기관 ${INSTITUTES.length}곳`]);
+  for (const i of INSTITUTES) expect(inst).toContain(i.code);
+});
+
+test("Daedeok institutes are listed together in one callout beside the map", () => {
+  const callout = HUB_LABELS.filter((l) => l.layer === "callout");
+  expect(callout).toHaveLength(1);
+  expect(callout[0].text).toMatch(/^대덕연구개발특구/);
+  for (const i of INSTITUTES.filter((i) => i.city === "대전")) expect(callout[0].text).toContain(i.code);
+  // 상자는 지도 오른쪽(바다) 바깥에 둔다
+  expect(callout[0].p[0]).toBeGreaterThan(0.55);
+  expect(MAP_MARKERS).toHaveLength(INSTITUTES.length);
 });

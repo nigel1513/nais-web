@@ -9,7 +9,8 @@ const STYLE: Partial<Record<Layer, string>> = {
   hub: "font-mono text-[13px] font-semibold tracking-[0.2em] text-fg",
   hero: "font-mono text-[10px] tracking-wider text-fg/60",
   axis: "font-mono text-[11px] uppercase tracking-[0.22em] text-cyan",
-  city: "rounded bg-ink-950/80 px-1.5 py-0.5 text-[12px] font-medium text-fg/85",
+  institute: "rounded bg-ink-950/80 px-1 py-px font-mono text-[10px] tracking-wide text-fg/85",
+  callout: "w-[228px] rounded-md border border-cyan/30 bg-ink-950/85 px-3 py-2.5 font-mono text-[10.5px] leading-[1.7] tracking-wide text-fg/80",
   ecosystem: "rounded-full bg-ink-950/80 px-2.5 py-1 text-[12px] font-semibold text-fg ring-1 ring-cyan/40",
   moonshot: "text-[13px] font-semibold text-fg",
 };
@@ -26,8 +27,18 @@ export function ProjectedLabels({ container, reducedMotion }: { container: HTMLD
   useEffect(() => {
     container.replaceChildren(...HUB_LABELS.map((l) => {
       const el = document.createElement("span");
-      el.textContent = l.text;
-      el.className = `absolute left-0 top-0 whitespace-nowrap will-change-transform ${STYLE[l.layer] ?? DEFAULT}`;
+      if (l.layer === "callout") {
+        // 첫 단어(대덕연구개발특구)를 제목으로, 나머지 약칭을 목록으로
+        const [head, ...rest] = l.text.split(" ");
+        const title = document.createElement("span");
+        title.className = "mb-1 block font-sans text-[12px] font-semibold tracking-normal text-fg";
+        title.textContent = head;
+        const grid = document.createElement("span");
+        grid.className = "grid grid-cols-4 gap-x-3 gap-y-0.5";
+        grid.append(...rest.filter((w) => w !== "·").map((code) => { const c = document.createElement("span"); c.textContent = code; return c; }));
+        el.append(title, grid);
+      } else el.textContent = l.text;
+      el.className = `absolute left-0 top-0 will-change-transform ${l.layer === "callout" ? "" : "whitespace-nowrap"} ${STYLE[l.layer] ?? DEFAULT}`;
       el.style.opacity = "0";
       return el;
     }));
@@ -49,8 +60,9 @@ export function ProjectedLabels({ container, reducedMotion }: { container: HTMLD
       if (SURFACE.includes(l.layer)) op *= THREE.MathUtils.smoothstep(v.z - center.z, -0.2, 0.5);
       v.project(camera);
       const center0 = l.layer === "hub" || l.layer === "ecosystem" || l.layer === "axis";
-      const dx = l.layer === "city" ? 8 : center0 ? 18 : 12, dy = l.layer === "city" ? -6 : center0 ? 26 : 8;
-      el.style.transform = `translate(${((v.x + 1) / 2) * size.width + dx}px, ${((1 - v.y) / 2) * size.height - dy}px)`;
+      const dx = l.layer === "institute" ? 6 : l.layer === "callout" ? 0 : center0 ? 18 : 12, dy = l.layer === "institute" ? 7 : l.layer === "callout" ? 0 : center0 ? 26 : 8;
+      const sx = ((v.x + 1) / 2) * size.width, sy = ((1 - v.y) / 2) * size.height - dy;
+      el.style.transform = l.align === "right" ? `translate(${sx - dx}px, ${sy}px) translateX(-100%)` : `translate(${sx + dx}px, ${sy}px)`;
       el.style.opacity = String(op);
     });
   });

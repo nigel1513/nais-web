@@ -1,7 +1,8 @@
 import type { Vec3 } from "./transform";
 import type { ResolvedState } from "@/lib/scroll/resolve";
 import { STATES } from "./states";
-import { HUB } from "./flows";
+import { HUB, CALLOUT } from "./markers";
+export { MAP_MARKERS } from "./markers";
 import { project } from "./geo";
 import { INSTITUTES, type Field } from "@/content/institutes";
 import { MISSIONS, LOOP_STAGES } from "@/content/home";
@@ -64,13 +65,16 @@ export function loopPoint(u: number): Vec3 {
 }
 export const LOOP_STATIONS = LOOP_STAGES.map((label, i) => ({ label, p: loopPoint(i / LOOP_STAGES.length) }));
 
-// 대전을 제외한 기관 소재 도시(같은 도시 기관 좌표의 평균)
-const CITY_LABELS = [...new Set(INSTITUTES.map((i) => i.city))].filter((c) => c !== "대전").map((city) => {
-  const list = INSTITUTES.filter((i) => i.city === city).map((i) => project(i.lon, i.lat));
-  return { city, x: list.reduce((s, p) => s + p[0], 0) / list.length, y: list.reduce((s, p) => s + p[1], 0) / list.length };
+// 대덕 밖 기관은 도시별로 묶어 한 라벨로(예: KIST · NIGT)
+const CITY_GROUPS = [...new Set(INSTITUTES.filter((i) => i.city !== "대전").map((i) => i.city))].map((city) => {
+  const list = INSTITUTES.filter((i) => i.city === city);
+  const pts = list.map((i) => project(i.lon, i.lat));
+  // 서울 서쪽 도시(고양·의왕)는 라벨을 점 왼쪽에 붙여 서울 라벨과 겹치지 않게 한다
+  const align = (["고양", "의왕"].includes(city) ? "right" : "left") as "left" | "right";
+  return { text: list.map((i) => i.code).join(" · "), align, x: pts.reduce((s, p) => s + p[0], 0) / pts.length, y: pts.reduce((s, p) => s + p[1], 0) / pts.length };
 });
 
-export type Layer = "hub" | "axis" | "city" | "hero" | "platform" | "convergence" | "autonomous" | "moonshot" | "ecosystem" | "closing";
+export type Layer = "hub" | "axis" | "institute" | "callout" | "hero" | "platform" | "convergence" | "autonomous" | "moonshot" | "ecosystem" | "closing";
 
 /** 스크롤 상태에서 각 레이어의 보이는 정도(0~1). hub(코어·기관 노드·연결선)는 한반도 지도 장면에서만 사라진다. */
 export function layerWeights(s: ResolvedState): Record<Layer, number> {
@@ -78,11 +82,11 @@ export function layerWeights(s: ResolvedState): Record<Layer, number> {
   const at = (i: number) => (s.from === s.to ? (s.from === i ? 1 : 0) : (s.to === i ? e : 0) + (s.from === i ? 1 - e : 0));
   const w = Object.fromEntries(STATES.map((name, i) => [name, at(i)])) as Record<Exclude<Layer, "hub">, number>;
   // 축 라벨(기초·응용)은 한반도 장면과 마지막 섹션(Next Steps 띠 위)에서는 숨긴다
-  return { ...w, hub: 1 - w.ecosystem, axis: Math.max(0, 1 - w.ecosystem - w.closing), city: w.ecosystem };
+  return { ...w, hub: 1 - w.ecosystem, axis: Math.max(0, 1 - w.ecosystem - w.closing), institute: w.ecosystem, callout: w.ecosystem };
 }
 
 const SHELL_DIR: Vec3 = [0.93, 0.28, 0.24];
-export const HUB_LABELS: { text: string; p: Vec3; layer: Layer }[] = [
+export const HUB_LABELS: { text: string; p: Vec3; layer: Layer; align?: "left" | "right" }[] = [
   { text: "NAIS", p: [0, 0, 0], layer: "hub" },
   { text: "Fundamental Science", p: [0, NODE_R * 1.16, 0], layer: "axis" },
   { text: "Applied Science", p: [0, -NODE_R * 1.16, 0], layer: "axis" },
@@ -91,6 +95,7 @@ export const HUB_LABELS: { text: string; p: Vec3; layer: Layer }[] = [
   { text: "Science × AI", p: [0, 0.32, 0], layer: "convergence" },
   ...LOOP_STATIONS.map((s) => ({ text: s.label, p: s.p, layer: "autonomous" as const })),
   ...MISSION_NODES.map((m) => ({ text: m.name, p: m.p, layer: "moonshot" as const })),
-  { text: `NAIS · 대덕 ${INSTITUTES.filter((i) => i.city === "대전").length}개 기관`, p: [HUB[0], HUB[1], 0], layer: "ecosystem" },
-  ...CITY_LABELS.map((c) => ({ text: c.city, p: [c.x, c.y, 0] as Vec3, layer: "city" as const })),
+  { text: `NAIS · 소관 연구기관 ${INSTITUTES.length}곳`, p: [HUB[0], HUB[1], 0], layer: "ecosystem" },
+  ...CITY_GROUPS.map((c) => ({ text: c.text, p: [c.x, c.y, 0] as Vec3, layer: "institute" as const, align: c.align })),
+  { text: `대덕연구개발특구 ${INSTITUTES.filter((i) => i.city === "대전").map((i) => i.code).join(" · ")}`, p: [CALLOUT[0], CALLOUT[1], 0], layer: "callout" },
 ];

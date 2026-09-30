@@ -5,6 +5,8 @@ import * as THREE from "three";
 import { STATES } from "@/lib/particles/states";
 import { HUB, flowSources, buildArcs, arcPolyline, packetAttributes } from "@/lib/particles/flows";
 import { SOUTH_RINGS, NORTH_RINGS } from "@/lib/particles/targets/korea";
+import { MAP_MARKERS, CALLOUT } from "@/lib/particles/markers";
+import { glowPoints } from "./glow";
 import { BLUE, CYAN, currentState } from "./ParticleSystem";
 
 const KOREA = STATES.indexOf("ecosystem");
@@ -57,7 +59,7 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
   const group = useRef<THREE.Group>(null);
   const time = useRef(0);
 
-  const { arcLines, southLines, northLines, packets, packetMat, core, rings } = useMemo(() => {
+  const { arcLines, southLines, northLines, markers, fan, packets, packetMat, core, rings } = useMemo(() => {
     const arcs = buildArcs(flowSources());
     const lineGeo = new THREE.BufferGeometry();
     const segs = 24;
@@ -70,6 +72,13 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
       vertexShader: arcVertex, fragmentShader: arcFragment, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uColor: { value: BLUE }, uOpacity: { value: 0 } },
     }));
+    // 25개 기관 마커(실제 소재지)
+    const markers = glowPoints(MAP_MARKERS.map((m) => [m.p[0], m.p[1], 0.004]), 46, new THREE.Color("#e6f8ff"));
+    // 대덕 허브 → 대덕연구개발특구 설명 상자로 이어지는 지시선
+    const fanPts: number[] = [HUB[0], HUB[1], 0.003, CALLOUT[0], CALLOUT[1], 0.003];
+    const fanGeo = new THREE.BufferGeometry();
+    fanGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(fanPts), 3));
+    const fan = new THREE.LineSegments(fanGeo, new THREE.LineBasicMaterial({ color: CYAN, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
     const southLines = ringLines(SOUTH_RINGS);
     const northLines = ringLines(NORTH_RINGS);
 
@@ -95,7 +104,7 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
       m.position.set(HUB[0], HUB[1], 0.01);
       return m;
     });
-    return { arcLines, southLines, northLines, packets, packetMat, core, rings };
+    return { arcLines, southLines, northLines, markers, fan, packets, packetMat, core, rings };
   }, []);
 
   useFrame((_, dt) => {
@@ -116,6 +125,9 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
     (arcLines.material as THREE.ShaderMaterial).uniforms.uOpacity.value = 0.95 * arrive;
     (southLines.material as THREE.LineBasicMaterial).opacity = 0.7 * arrive;
     (northLines.material as THREE.LineBasicMaterial).opacity = 0.1 * arrive;
+    (fan.material as THREE.LineBasicMaterial).opacity = 0.5 * arrive;
+    const mu = (markers.material as THREE.ShaderMaterial).uniforms;
+    mu.uOpacity.value = arrive; mu.uPixelRatio.value = gl.getPixelRatio();
     const beat = reducedMotion ? 0.5 : 0.5 + 0.5 * Math.sin(t * 3);
     (core.material as THREE.MeshBasicMaterial).opacity = (0.6 + 0.4 * beat) * arrive;
     core.scale.setScalar(1 + 0.3 * beat);
@@ -131,6 +143,8 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
       <primitive object={northLines} />
       <primitive object={southLines} />
       <primitive object={arcLines} />
+      <primitive object={fan} />
+      <primitive object={markers} />
       <primitive object={packets} />
       <primitive object={core} />
       {rings.map((r, i) => <primitive key={i} object={r} />)}

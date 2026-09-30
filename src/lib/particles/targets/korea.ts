@@ -1,6 +1,6 @@
 import { mulberry32, clamp3 } from "../rng";
 import { project, pointInRing, samplePerimeter } from "../geo";
-import { INSTITUTES } from "@/content/institutes";
+import { MAP_MARKERS } from "../markers";
 import outlineJson from "@/content/korea-outline.json";
 
 type Ring = [number, number][];
@@ -37,7 +37,7 @@ export function koreaDotGrid(): [number, number][] {
 
 const perimeter = (rings: Ring[]) => rings.map((r) => r.reduce((s, p, i) => (i ? s + Math.hypot(p[0] - r[i - 1][0], p[1] - r[i - 1][1]) : 0), 0));
 const SOUTH_LEN = perimeter(SOUTH_RINGS), NORTH_LEN = perimeter(NORTH_RINGS);
-const NODES = INSTITUTES.map((i) => project(i.lon, i.lat));
+const NODES = MAP_MARKERS.map((m) => m.p); // 대덕 기관은 허브 둘레에 펼친 위치
 
 function pickRing(lens: number[], u: number) {
   let t = u * lens.reduce((a, b) => a + b, 0);

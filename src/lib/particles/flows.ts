@@ -4,8 +4,8 @@ import { INSTITUTES } from "@/content/institutes";
 import { insideSouth, KOREA_BBOX } from "./targets/korea";
 import type { Vec3 } from "./transform";
 
-/** 대덕(NAIS 허브) 위치. 지도 좌표계(XY 평면, z=0). */
-export const HUB: [number, number] = project(127.36, 36.38);
+import { HUB } from "./markers";
+export { HUB } from "./markers";
 const SOUTH_LIMIT_Y = project(127, 38.3)[1]; // 남한 영역 위쪽 한계
 
 export interface Arc { p0: Vec3; c: Vec3; p1: Vec3 }

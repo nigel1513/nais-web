@@ -1,12 +1,9 @@
 import { sphere } from "./sphere";
-import { mesh } from "./mesh";
-import { convergence } from "./convergence";
-import { loop } from "./loop";
-import { moonshot } from "./moonshot";
 import { korea } from "./korea";
 
-/** STATES 순서: sphere, mesh, convergence, loop, moonshot, korea, sphereFinal(같은 구 좌표, 설정만 다름) */
+/** STATES 순서. 모든 섹션이 같은 구(동일 배열)를 쓰고, 생태계 섹션만 한반도 지도로 모인다. */
 export function buildAllTargets(count: number): Float32Array[] {
   const s = sphere(count);
-  return [s, mesh(count), convergence(count), loop(count), moonshot(count), korea(count), s];
+  const k = korea(count);
+  return [s, s, s, s, s, k, s];
 }

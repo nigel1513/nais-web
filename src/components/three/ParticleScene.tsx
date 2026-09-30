@@ -1,7 +1,6 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
 import { ParticleSystem } from "./ParticleSystem";
-import { ParticleLines } from "./ParticleLines";
 import { ProjectedLabels } from "./ProjectedLabels";
 import { KoreaFlows } from "./KoreaFlows";
 
@@ -13,9 +12,9 @@ export default function ParticleScene({ targets, reducedMotion, labelContainer }
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       frameloop={reducedMotion ? "demand" : "always"}
     >
-      <ParticleSystem targets={targets} reducedMotion={reducedMotion} />
-      <ParticleLines targets={targets} reducedMotion={reducedMotion} />
-      <KoreaFlows reducedMotion={reducedMotion} />
+      <ParticleSystem targets={targets} reducedMotion={reducedMotion}>
+        <KoreaFlows reducedMotion={reducedMotion} />
+      </ParticleSystem>
       {labelContainer && <ProjectedLabels container={labelContainer} reducedMotion={reducedMotion} />}
     </Canvas>
   );

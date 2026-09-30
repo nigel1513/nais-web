@@ -2,11 +2,11 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { STATES, STATE_CONFIG } from "@/lib/particles/states";
+import { STATES } from "@/lib/particles/states";
 import { HUB, flowSources, buildArcs, arcPolyline, packetAttributes } from "@/lib/particles/flows";
 import { BLUE, CYAN, currentState } from "./ParticleSystem";
 
-const KOREA = STATES.indexOf("korea");
+const KOREA = STATES.indexOf("ecosystem");
 const RINGS = 3;
 
 const packetVertex = /* glsl */ `
@@ -33,9 +33,9 @@ void main(){
   gl_FragColor = vec4(uColor, a * uOpacity);
 }`;
 
-/** 한반도 상태에서 각 연구 거점의 데이터가 대덕 NAIS 허브로 모여드는 흐름(곡선·패킷·허브 파동). */
+/** particles 그룹의 자식으로 같은 변환을 따른다. 한반도 상태에서 각 연구 거점의 데이터가 대덕 NAIS 허브로 모여드는 흐름(곡선·패킷·허브 파동). */
 export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
-  const { scene, gl } = useThree();
+  const { gl } = useThree();
   const group = useRef<THREE.Group>(null);
   const time = useRef(0);
 
@@ -81,8 +81,6 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
     if (!g.visible) return;
     if (!reducedMotion) time.current += dt;
     const t = time.current;
-    g.rotation.x = STATE_CONFIG.korea.tilt;
-    g.position.x = scene.getObjectByName("particles")?.position.x ?? 0;
 
     packetMat.uniforms.uTime.value = t;
     packetMat.uniforms.uPixelRatio.value = gl.getPixelRatio();

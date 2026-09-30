@@ -11,3 +11,9 @@ export function applyStateTransform(p: Vec3, spin: number, tilt: number, time: n
   const r: Vec3 = [x1, ct * y1 - st * z1, st * y1 + ct * z1];
   return r.map((v) => (Math.abs(v) < 1e-12 ? 0 : v)) as Vec3;
 }
+
+/** ParticleSystem 그룹 변환(scale → y축 yaw → x축 tilt)과 같은 결과를 계산한다. 라벨·레이아웃 검사에 쓴다. */
+export function applyLook(p: Vec3, look: { scale: number; yaw: number; tilt: number }): Vec3 {
+  const s: Vec3 = [p[0] * look.scale, p[1] * look.scale, p[2] * look.scale];
+  return applyStateTransform(s, 1, look.tilt, look.yaw);
+}

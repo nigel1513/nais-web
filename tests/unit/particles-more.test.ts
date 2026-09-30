@@ -1,7 +1,5 @@
 import { describe, expect, test } from "vitest";
 import { project, pointInRing, samplePerimeter } from "@/lib/particles/geo";
-import { convergence } from "@/lib/particles/targets/convergence";
-import { moonshot, MOONSHOT_NODES } from "@/lib/particles/targets/moonshot";
 import { korea } from "@/lib/particles/targets/korea";
 import { buildAllTargets } from "@/lib/particles/targets";
 import { STATE_LABELS } from "@/lib/particles/labels";
@@ -25,7 +23,7 @@ describe("geo", () => {
   });
 });
 
-describe.each([["convergence", convergence], ["moonshot", moonshot], ["korea", korea]] as const)("%s", (_, gen) => {
+describe.each([["korea", korea]] as const)("%s", (_, gen) => {
   test.each([1, 2, 1001, 40000])("count %i", (count) => {
     const a = gen(count);
     expect(a).toHaveLength(count * 3);
@@ -42,17 +40,14 @@ test("korea puts the brightest cluster in Daedeok", () => {
   expect(near / 20000).toBeGreaterThan(0.08);
 });
 
-test("moonshot has 12 nodes", () => expect(MOONSHOT_NODES).toHaveLength(12));
-
-test("targets are all distinct after replacement", () => {
+test("targets: the single sphere everywhere except the ecosystem map", () => {
   const t = buildAllTargets(200);
-  const keys = t.map((a) => a.slice(0, 6).join(","));
-  expect(new Set(keys.slice(0, 6)).size).toBe(6);
+  expect(t).toHaveLength(7);
+  for (const i of [0, 1, 2, 3, 4, 6]) expect(t[i]).toBe(t[0]);
+  expect(t[5]).not.toBe(t[0]);
 });
 
-test("labels cover mesh, convergence, loop, moonshot, korea hub", () => {
-  expect(Object.keys(STATE_LABELS).sort()).toEqual(["convergence", "korea", "loop", "mesh", "moonshot"]);
-  expect(STATE_LABELS.korea?.map((l) => l.text)).toEqual(["NAIS"]);
-  expect(STATE_LABELS.moonshot).toHaveLength(12);
-  expect(STATE_LABELS.loop?.map((l) => l.text)).toEqual(["Question", "Search", "Hypothesis", "Experiment", "Analysis", "Learning"]);
+test("only the ecosystem hub carries a label", () => {
+  expect(Object.keys(STATE_LABELS)).toEqual(["ecosystem"]);
+  expect(STATE_LABELS.ecosystem?.map((l) => l.text)).toEqual(["NAIS"]);
 });

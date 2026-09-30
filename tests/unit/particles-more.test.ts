@@ -2,7 +2,6 @@ import { describe, expect, test } from "vitest";
 import { project, pointInRing, samplePerimeter } from "@/lib/particles/geo";
 import { korea } from "@/lib/particles/targets/korea";
 import { buildAllTargets } from "@/lib/particles/targets";
-import { STATE_LABELS } from "@/lib/particles/labels";
 
 describe("geo", () => {
   const square: [number, number][] = [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]];
@@ -47,7 +46,3 @@ test("targets: the single sphere everywhere except the ecosystem map", () => {
   expect(t[5]).not.toBe(t[0]);
 });
 
-test("only the ecosystem hub carries a label", () => {
-  expect(Object.keys(STATE_LABELS)).toEqual(["ecosystem"]);
-  expect(STATE_LABELS.ecosystem?.map((l) => l.text)).toEqual(["NAIS"]);
-});

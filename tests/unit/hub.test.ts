@@ -1,11 +1,36 @@
 import { describe, expect, test } from "vitest";
-import { INSTITUTE_NODES, MISSION_NODES, SHELLS, LOOP_STATIONS, loopPoint, layerWeights, HUB_LABELS } from "@/lib/particles/hub";
+import { INSTITUTE_NODES, MISSION_NODES, SHELLS, LOOP_STATIONS, loopPoint, layerWeights, HUB_LABELS, DOMAINS, spectrumPolar, sweepPolar } from "@/lib/particles/hub";
 import { INSTITUTES } from "@/content/institutes";
 import { MISSIONS, LOOP_STAGES } from "@/content/home";
 
 const len = (p: number[]) => Math.hypot(p[0], p[1], p[2]);
 
 describe("hub geometry", () => {
+  test("every institute is classified into a domain and a basic→applied spectrum value", () => {
+    expect(DOMAINS).toHaveLength(6);
+    for (const i of INSTITUTES) {
+      expect(DOMAINS.map((d) => d.id)).toContain(i.field);
+      expect(i.spectrum).toBeGreaterThanOrEqual(0); expect(i.spectrum).toBeLessThanOrEqual(1);
+    }
+  });
+  test("basic science sits north, applied science south", () => {
+    const y = (code: string) => INSTITUTE_NODES.find((n) => n.code === code)!.p[1];
+    expect(y("KASI")).toBeGreaterThan(y("KRISS"));
+    expect(y("KRISS")).toBeGreaterThan(y("ETRI"));
+    expect(y("ETRI")).toBeGreaterThan(y("KRRI"));
+    expect(spectrumPolar(0)).toBeLessThan(spectrumPolar(1));
+  });
+  test("institutes of the same domain share a longitude sector", () => {
+    const lon = (p: number[]) => Math.atan2(p[2], p[0]);
+    const phys = INSTITUTE_NODES.filter((n) => INSTITUTES.find((i) => i.code === n.code)!.field === "physics").map((n) => lon(n.p));
+    const spread = Math.max(...phys) - Math.min(...phys);
+    expect(spread).toBeLessThan((2 * Math.PI) / 6);
+  });
+  test("the sweep band moves from basic (north) to applied (south) as the page scrolls", () => {
+    expect(sweepPolar({ from: 0, to: 0, t: 1 })).toBeCloseTo(spectrumPolar(0));
+    expect(sweepPolar({ from: 6, to: 6, t: 1 })).toBeCloseTo(spectrumPolar(1));
+    expect(sweepPolar({ from: 2, to: 3, t: 0.5 })).toBeGreaterThan(sweepPolar({ from: 1, to: 1, t: 1 }));
+  });
   test("one node per institute on the sphere surface", () => {
     expect(INSTITUTE_NODES).toHaveLength(INSTITUTES.length);
     INSTITUTE_NODES.forEach((n) => expect(len(n.p)).toBeCloseTo(1.62, 2));
@@ -45,5 +70,9 @@ describe("layerWeights", () => {
 test("labels carry a layer and cover every section meaning", () => {
   const layers = new Set(HUB_LABELS.map((l) => l.layer));
   for (const l of ["hub", "hero", "platform", "convergence", "autonomous", "moonshot", "ecosystem"]) expect(layers.has(l as never)).toBe(true);
+  const texts = HUB_LABELS.map((l) => l.text);
+  expect(texts).toContain("Fundamental Science");
+  expect(texts).toContain("Applied Science");
+  for (const d of DOMAINS) expect(texts).toContain(d.label);
   expect(HUB_LABELS.filter((l) => l.layer === "moonshot").map((l) => l.text)).toEqual(MISSIONS.map((m) => m.name));
 });

@@ -9,6 +9,7 @@ const STYLE: Partial<Record<Layer, string>> = {
   hub: "font-mono text-[13px] font-semibold tracking-[0.2em] text-fg",
   ecosystem: "font-mono text-[13px] font-semibold tracking-[0.2em] text-fg",
   hero: "font-mono text-[10px] tracking-wider text-fg/60",
+  axis: "font-mono text-[11px] uppercase tracking-[0.22em] text-cyan",
   moonshot: "text-[13px] font-semibold text-fg",
 };
 const DEFAULT = "font-mono text-[11px] tracking-wider text-cyan";
@@ -46,7 +47,7 @@ export function ProjectedLabels({ container, reducedMotion }: { container: HTMLD
       group.localToWorld(v);
       if (SURFACE.includes(l.layer)) op *= THREE.MathUtils.smoothstep(v.z - center.z, -0.2, 0.5);
       v.project(camera);
-      const center0 = l.layer === "hub" || l.layer === "ecosystem";
+      const center0 = l.layer === "hub" || l.layer === "ecosystem" || l.layer === "axis";
       el.style.transform = `translate(${((v.x + 1) / 2) * size.width + (center0 ? 18 : 12)}px, ${((1 - v.y) / 2) * size.height - (center0 ? 26 : 8)}px)`;
       el.style.opacity = String(op);
     });

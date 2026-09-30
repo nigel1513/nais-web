@@ -100,10 +100,11 @@ export function OrgChart() {
             <div className="mt-8">
               {unit.staff.length > 0
                 ? <StaffTable rows={unit.staff} />
-                : <p className="text-[15px] text-muted">
-                    구성원 정보가 아직 공개되지 않았습니다.
-                    {unit.children.length > 0 && ` 하위 조직: ${unit.children.map((c) => c.name).join(", ")}`}
-                  </p>}
+                : unit.children.length > 0 && (
+                    <p className="text-[15px] text-fg/80">
+                      <span className="mr-3 text-[13px] text-muted">하위 조직</span>{unit.children.map((c) => c.name).join(" · ")}
+                    </p>
+                  )}
             </div>
           </section>
         )}

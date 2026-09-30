@@ -24,10 +24,11 @@ test("choosing a team opens its staff table (role, duties, phone; no names)", as
   await expect(page.locator("main table")).toHaveCount(1);
 });
 
-test("a unit without published staff opens a notice instead of a table", async ({ page }) => {
+test("a unit without published staff opens its name and parent, without a table", async ({ page }) => {
   await page.goto("/about/");
   await page.locator("#organization").getByRole("button", { name: "AI자원팀", exact: true }).click();
-  await expect(page.locator("#unit-panel")).toContainText("구성원 정보가 아직 공개되지 않았습니다");
+  await expect(page.locator("#unit-panel h2")).toHaveText("AI자원팀");
+  await expect(page.locator("#unit-panel")).toContainText("과학AI통합플랫폼운영단");
   await expect(page.locator("main table")).toHaveCount(0);
 });
 

@@ -67,3 +67,27 @@ test("next steps sit on their own solid band, not over the sphere", async ({ pag
   const bg = await page.locator("#next-steps").evaluate((el) => getComputedStyle(el).backgroundColor);
   expect(bg).not.toBe("rgba(0, 0, 0, 0)");
 });
+
+test("03 autonomous shows only animated English stages", async ({ page }) => {
+  await page.goto("/");
+  const stages = page.locator('#autonomous ol[aria-label="Research loop"] li');
+  await expect(stages).toHaveText(["Question", "Search", "Hypothesis", "Experiment", "Analysis", "Learning"]);
+  await expect(page.locator("#autonomous")).not.toContainText("→");
+  await page.waitForTimeout(1500);
+  await expect(page.locator('#autonomous ol[aria-label="Research loop"] li.text-cyan')).toHaveCount(1);
+});
+
+test("no placeholder wording anywhere on home or organization", async ({ page }) => {
+  for (const path of ["/", "/about/"]) {
+    await page.goto(path);
+    await expect(page.locator("main")).not.toContainText(/명칭 확인 중|구성 중|공개되지 않았|준비 중/);
+  }
+});
+
+test("institute CI list has a real section heading", async ({ page }) => {
+  await page.goto("/");
+  const h = page.locator("#institutes h2");
+  await expect(h).toHaveText("소관 연구기관");
+  const size = await h.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  expect(size).toBeGreaterThanOrEqual(28);
+});

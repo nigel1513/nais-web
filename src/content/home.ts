@@ -37,16 +37,16 @@ export const CONVERGENCE_ITEMS: Item[] = [
 ];
 export const CONVERGENCE_OWNER = "과학AI융합지원단";
 
-export const LOOP_STAGES = ["질문", "탐색", "가설", "실험", "분석", "학습"] as const;
+export const LOOP_STAGES = ["Question", "Search", "Hypothesis", "Experiment", "Analysis", "Learning"] as const;
 export const AUTONOMOUS_BODY =
   "자율형AI과학자연구단은 AI가 가설을 세우고 실험을 설계·분석하는 연구 방식을 만듭니다. K-문샷의 AI과학자 미션과 함께 움직입니다.";
 
 export const MOONSHOT_BODY =
   "과학기술×AI 국가전략(K-문샷)은 2035년까지 12개 미션에 도전합니다. NAIS는 이 전략의 자원 통합 플랫폼이자 협업 허브입니다.";
 
-// 출처: NST 조직도의 K-문샷추진지원단 미션별 총괄지휘자(PD)·지원 업무 (2026-09-30 확인). 12번째 미션은 공개 자료에서 확인되지 않았다.
+// 출처: NST 조직도의 K-문샷추진지원단 미션별 총괄지휘자(PD)·지원 업무 (2026-09-30 확인). 공개된 11개만 싣는다.
 export const MISSIONS: { code: string; name: string }[] = [
-  "AI과학자", "반도체", "신약", "태양전지", "핵융합", "휴머노이드", "SMR선박", "소재", "양자", "우주", "BCI", "명칭 확인 중",
+  "AI과학자", "반도체", "신약", "태양전지", "핵융합", "휴머노이드", "SMR선박", "소재", "양자", "우주", "BCI",
 ].map((name, i) => ({ code: String(i + 1).padStart(2, "0"), name }));
 
 export const ECOSYSTEM_BODY = "출연연의 도메인 전문성부터 대학·산업계의 AI 역량까지.";

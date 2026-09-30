@@ -9,8 +9,10 @@ function InstituteLogos() {
     <div id="institutes" className="relative z-10 -mx-4 bg-ink-950 px-4 pb-24 pt-16 md:-mx-8 md:px-8">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
       <div className="mx-auto max-w-7xl">
-        <h3 className="text-[13px] text-muted">국가과학기술연구회 소관 연구기관</h3>
-        <ul className="mt-10 grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <p className="eyebrow">Research Institutes</p>
+        <h2 className="mt-4 text-[2rem] font-semibold tracking-[-0.025em] md:text-[2.6rem]">소관 연구기관</h2>
+        <p className="mt-3 text-[15px] text-muted">국가과학기술연구회 소관 25개 과학기술분야 정부출연연구기관</p>
+        <ul className="mt-12 grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {INSTITUTES.map((i) => (
             <li key={i.code} className="flex h-12 items-center">
               <Image src={`/ci/${i.code}.png`} alt={i.nameKo} title={i.nameKo} width={180} height={48}

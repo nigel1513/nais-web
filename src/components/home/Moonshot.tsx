@@ -7,9 +7,8 @@ export function Moonshot() {
   return (
     <Section id={s.id} eyebrow={s.eyebrow} title={s.title} lead={MOONSHOT_BODY}>
       <div data-reveal>
-        <p className="text-[13px] text-muted">12개 미션</p>
-        <CycleWords words={MISSIONS.map((m) => m.name)} dimmed={["명칭 확인 중"]} interval={900} label="K-문샷 12개 미션"
-          className="mt-3 text-[1.9rem] font-semibold leading-[1.25] tracking-[-0.025em] md:text-[2.3rem]" />
+        <CycleWords words={MISSIONS.map((m) => m.name)} interval={900} label="K-문샷 미션"
+          className="text-[1.9rem] font-semibold leading-[1.25] tracking-[-0.025em] md:text-[2.3rem]" />
       </div>
     </Section>
   );

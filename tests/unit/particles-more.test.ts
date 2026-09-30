@@ -54,5 +54,5 @@ test("labels cover mesh, convergence, loop, moonshot, korea hub", () => {
   expect(Object.keys(STATE_LABELS).sort()).toEqual(["convergence", "korea", "loop", "mesh", "moonshot"]);
   expect(STATE_LABELS.korea?.map((l) => l.text)).toEqual(["NAIS"]);
   expect(STATE_LABELS.moonshot).toHaveLength(12);
-  expect(STATE_LABELS.loop?.map((l) => l.text)).toEqual(["질문", "탐색", "가설", "실험", "분석", "학습"]);
+  expect(STATE_LABELS.loop?.map((l) => l.text)).toEqual(["Question", "Search", "Hypothesis", "Experiment", "Analysis", "Learning"]);
 });

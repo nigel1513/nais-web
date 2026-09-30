@@ -1,16 +1,20 @@
+import { HOME_SECTIONS } from "@/content/home";
 import { ParticleLayer } from "@/components/three/ParticleLayer";
+import { Hero } from "@/components/home/Hero";
+import { Platform } from "@/components/home/Platform";
+import { Convergence } from "@/components/home/Convergence";
+import { Autonomous } from "@/components/home/Autonomous";
+import { Moonshot } from "@/components/home/Moonshot";
+import { Ecosystem } from "@/components/home/Ecosystem";
+import { News } from "@/components/home/News";
 
-const IDS = ["hero", "platform", "convergence", "autonomous", "moonshot", "ecosystem", "news"] as const;
+const IDS = HOME_SECTIONS.map((s) => s.id);
 
 export default function Home() {
   return (
     <>
       <ParticleLayer sectionIds={IDS} />
-      {IDS.map((id) => (
-        <section key={id} id={id} className="relative z-10 flex min-h-[140vh] items-start px-8 pt-32">
-          <h2 className="text-3xl font-semibold">{id}</h2>
-        </section>
-      ))}
+      <Hero /><Platform /><Convergence /><Autonomous /><Moonshot /><Ecosystem /><News />
     </>
   );
 }

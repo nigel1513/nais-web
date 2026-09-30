@@ -1,12 +1,12 @@
 import { Reveal } from "./Reveal";
 
-export function Section({ id, eyebrow, title, as = "h2", children }: {
-  id: string; eyebrow: string; title: string; as?: "h1" | "h2"; children?: React.ReactNode;
+export function Section({ id, eyebrow, title, as = "h2", reveal = true, children }: {
+  id: string; eyebrow: string; title: string; as?: "h1" | "h2"; reveal?: boolean; children?: React.ReactNode;
 }) {
   const H = as;
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="relative z-10 min-h-[140vh] px-4 md:px-8">
-      <Reveal className="mx-auto grid min-h-screen max-w-7xl items-center py-28 lg:grid-cols-12">
+      <Reveal enabled={reveal} className="mx-auto grid min-h-screen max-w-7xl items-center py-28 lg:grid-cols-12">
         <div className="relative lg:col-span-6 xl:col-span-5">
           <div aria-hidden="true" className="absolute -inset-x-4 -inset-y-10 md:-inset-x-8 -z-10 rounded-[40px] bg-gradient-to-r from-ink-950/90 via-ink-950/70 to-transparent blur-2xl" />
           <p data-reveal className="eyebrow">{eyebrow}</p>

@@ -1,13 +1,10 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
-import { useMemo } from "react";
-import { buildAllTargets } from "@/lib/particles/targets";
 import { ParticleSystem } from "./ParticleSystem";
 import { ParticleLines } from "./ParticleLines";
 import { ProjectedLabels } from "./ProjectedLabels";
 
-export default function ParticleScene({ count, reducedMotion, labelContainer }: { count: number; reducedMotion: boolean; labelContainer: HTMLDivElement | null }) {
-  const targets = useMemo(() => buildAllTargets(count), [count]);
+export default function ParticleScene({ targets, reducedMotion, labelContainer }: { targets: Float32Array[]; reducedMotion: boolean; labelContainer: HTMLDivElement | null }) {
   return (
     <Canvas
       dpr={[1, 2]}

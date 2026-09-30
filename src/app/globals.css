@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Pretendard(OFL-1.1) 가변 폰트 dynamic subset: 페이지에 쓰인 글자 범위의 woff2 조각만 내려받는다 */
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 
 @theme {
   --color-ink-950: #05080d;
@@ -9,7 +11,7 @@
   --color-muted: #9aa9bc;
   --color-cyan: #3fd0d4;
   --color-blue: #4a8dff;
-  --font-sans: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-sans: "Pretendard Variable", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
@@ -27,3 +29,5 @@ p { word-break: keep-all; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+[data-reveal] { transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.reveal-pending { opacity: 0; transform: translateY(28px); }

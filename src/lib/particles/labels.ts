@@ -5,10 +5,12 @@ import { CONVERGENCE_LABELS } from "./targets/convergence";
 import { LOOP_STATIONS } from "./targets/loop";
 import { MOONSHOT_NODES } from "./targets/moonshot";
 import { LOOP_STAGES, MISSIONS } from "@/content/home";
+import { HUB } from "./flows";
 
 export const STATE_LABELS: Partial<Record<StateName, { text: string; p: Vec3 }[]>> = {
   mesh: MESH_LABEL_ANCHORS,
   convergence: CONVERGENCE_LABELS,
   loop: LOOP_STATIONS.map((p, i) => ({ text: LOOP_STAGES[i], p })),
   moonshot: MOONSHOT_NODES.map((p, i) => ({ text: MISSIONS[i].replace("Mission ", ""), p })),
+  korea: [{ text: "NAIS", p: [HUB[0], HUB[1], 0] }],
 };

@@ -11,6 +11,6 @@ export const STATE_CONFIG: Record<StateName, StateConfig> = {
   convergence: { spin: 0,    tilt: 0,    offsetX: 0.9, brightness: 1.0, lines: null },
   loop:        { spin: 0.12, tilt: 1.1,  offsetX: 1.2, brightness: 1.0, lines: null },
   moonshot:    { spin: 0.04, tilt: 1.2,  offsetX: 1.1, brightness: 1.0, lines: null },
-  korea:       { spin: 0,    tilt: 0,    offsetX: 1.5, brightness: 0.95, lines: { anchors: 25, k: 3, maxDist: 2.2 } },
+  korea:       { spin: 0,    tilt: -0.75, offsetX: 1.5, brightness: 0.75, lines: null },
   sphereFinal: { spin: 0.09, tilt: 0.25, offsetX: 1.1, brightness: 1.35, lines: { anchors: 260, k: 3, maxDist: 1.0 } },
 };

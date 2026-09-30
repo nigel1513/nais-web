@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { ParticleSystem } from "./ParticleSystem";
 import { ParticleLines } from "./ParticleLines";
 import { ProjectedLabels } from "./ProjectedLabels";
+import { KoreaFlows } from "./KoreaFlows";
 
 export default function ParticleScene({ targets, reducedMotion, labelContainer }: { targets: Float32Array[]; reducedMotion: boolean; labelContainer: HTMLDivElement | null }) {
   return (
@@ -14,6 +15,7 @@ export default function ParticleScene({ targets, reducedMotion, labelContainer }
     >
       <ParticleSystem targets={targets} reducedMotion={reducedMotion} />
       <ParticleLines targets={targets} reducedMotion={reducedMotion} />
+      <KoreaFlows reducedMotion={reducedMotion} />
       {labelContainer && <ProjectedLabels container={labelContainer} reducedMotion={reducedMotion} />}
     </Canvas>
   );

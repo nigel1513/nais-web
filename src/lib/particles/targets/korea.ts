@@ -7,7 +7,11 @@ const RINGS = (outlineJson as number[][][]).map((r) => r.map(([lon, lat]) => pro
 const RING_LEN = RINGS.map((r) => r.reduce((s, p, i) => (i ? s + Math.hypot(p[0] - r[i - 1][0], p[1] - r[i - 1][1]) : 0), 0));
 const TOTAL = RING_LEN.reduce((a, b) => a + b, 0);
 const NODES = INSTITUTES.map((i) => project(i.lon, i.lat));
-const BBOX = RINGS.flat().reduce((b, [x, y]) => [Math.min(b[0], x), Math.min(b[1], y), Math.max(b[2], x), Math.max(b[3], y)], [9, 9, -9, -9]);
+export const KOREA_BBOX = RINGS.flat().reduce((b, [x, y]) => [Math.min(b[0], x), Math.min(b[1], y), Math.max(b[2], x), Math.max(b[3], y)], [9, 9, -9, -9]);
+
+export function insideKorea(x: number, y: number): boolean {
+  return RINGS.some((ring) => pointInRing(x, y, ring));
+}
 
 /** 윤곽선(55%) + 내부 채움(20%) + 기관 소재지 클러스터(25%). XY 평면. */
 export function korea(count: number, seed = 6): Float32Array {
@@ -21,8 +25,8 @@ export function korea(count: number, seed = 6): Float32Array {
     else if (r < 0.75) {
       x = 0; y = 0;
       for (let tries = 0; tries < 30; tries++) {
-        const cx = BBOX[0] + rand() * (BBOX[2] - BBOX[0]), cy = BBOX[1] + rand() * (BBOX[3] - BBOX[1]);
-        if (RINGS.some((ring) => pointInRing(cx, cy, ring))) { x = cx; y = cy; break; }
+        const cx = KOREA_BBOX[0] + rand() * (KOREA_BBOX[2] - KOREA_BBOX[0]), cy = KOREA_BBOX[1] + rand() * (KOREA_BBOX[3] - KOREA_BBOX[1]);
+        if (insideKorea(cx, cy)) { x = cx; y = cy; break; }
       }
     } else {
       const n = NODES[Math.floor(rand() * NODES.length)], a = rand() * Math.PI * 2, d = Math.pow(rand(), 2) * 0.07;

@@ -50,8 +50,9 @@ test("targets are all distinct after replacement", () => {
   expect(new Set(keys.slice(0, 6)).size).toBe(6);
 });
 
-test("labels cover mesh, convergence, loop, moonshot", () => {
-  expect(Object.keys(STATE_LABELS).sort()).toEqual(["convergence", "loop", "mesh", "moonshot"]);
+test("labels cover mesh, convergence, loop, moonshot, korea hub", () => {
+  expect(Object.keys(STATE_LABELS).sort()).toEqual(["convergence", "korea", "loop", "mesh", "moonshot"]);
+  expect(STATE_LABELS.korea?.map((l) => l.text)).toEqual(["NAIS"]);
   expect(STATE_LABELS.moonshot).toHaveLength(12);
   expect(STATE_LABELS.loop?.map((l) => l.text)).toEqual(["질문", "탐색", "가설", "실험", "분석", "학습"]);
 });

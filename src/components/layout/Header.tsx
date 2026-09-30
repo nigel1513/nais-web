@@ -9,7 +9,7 @@ export function Header() {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded focus:bg-ink-800 focus:px-3 focus:py-2">
         본문 바로가기
       </a>
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-8">
+      <div className="container-site flex h-14 items-center justify-between">
         <Link href="/" aria-label={`${SITE.shortName} ${SITE.nameKo} 홈`}><Wordmark /></Link>
         <nav aria-label="주 메뉴" className="hidden sm:block">
           <ul className="flex gap-7 text-sm text-fg/70">

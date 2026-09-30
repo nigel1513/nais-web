@@ -7,9 +7,9 @@ import { Section } from "./Section";
 /** 소관 연구기관 CI 목록. 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
 function InstituteLogos() {
   return (
-    <div id="institutes" className="relative z-10 -mx-4 bg-ink-950 px-4 pb-24 pt-16 md:-mx-8 md:px-8">
+    <div id="institutes" className="relative z-10 bg-ink-950 pb-24 pt-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
-      <div className="mx-auto max-w-7xl">
+      <div className="container-site">
         <p className="eyebrow">Research Institutes</p>
         <h2 className="mt-4 text-[2rem] font-semibold tracking-[-0.025em] md:text-[2.6rem]">소관 연구기관</h2>
         <p className="mt-3 text-[15px] text-muted">국가과학기술연구회 소관 25개 과학기술분야 정부출연연구기관</p>

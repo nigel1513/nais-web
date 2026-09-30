@@ -5,8 +5,8 @@ export const metadata: Metadata = { title: "조직도", description: "국가과�
 
 export default function AboutPage() {
   return (
-    <div className="px-4 md:px-8">
-      <section id="organization" aria-labelledby="organization-title" className="mx-auto max-w-7xl scroll-mt-20 pb-32 pt-36">
+    <div>
+      <section id="organization" aria-labelledby="organization-title" className="container-site scroll-mt-20 pb-32 pt-36">
         <p className="eyebrow">Organization</p>
         <h1 id="organization-title" className="mt-5 text-[2.8rem] font-bold leading-none tracking-[-0.035em] md:text-[5rem]">조직도</h1>
         <div className="mt-16">

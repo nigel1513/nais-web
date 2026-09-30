@@ -2,7 +2,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo } from "react";
 import * as THREE from "three";
-import { INSTITUTE_NODES, MISSION_NODES, SHELLS, LOOP_STATIONS, DOMAINS, loopPoint, layerWeights, spectrumPolar, sweepPolar, onSphereAt, NODE_R } from "@/lib/particles/hub";
+import { INSTITUTE_NODES, MISSION_NODES, SHELLS, LOOP_STATIONS, loopPoint, layerWeights, sweepPolar, NODE_R } from "@/lib/particles/hub";
 import { currentState, CYAN } from "./ParticleSystem";
 
 const ICE = new THREE.Color("#e6f8ff");
@@ -67,19 +67,8 @@ export function HubLayers({ reducedMotion }: { reducedMotion: boolean }) {
     const comet = glowPoints([loopPoint(0)], 120, ICE);
     const missions = glowPoints(MISSION_NODES.map((m) => m.p), 64, ICE);
     const missionSpokes = lines(MISSION_NODES.flatMap((m) => [...m.p, ...m.p.map((v) => v * 1.18)]), ICE);
-    // 좌표 격자: 기초·중간·응용 위도선과 분야 경계 경선
-    const grid: number[] = [];
-    const seg = (a: number[], b: number[]) => grid.push(...a, ...b);
-    for (const s of [0, 0.5, 1]) for (let i = 0; i < 96; i++) seg(onSphereAt(spectrumPolar(s), (i / 96) * Math.PI * 2), onSphereAt(spectrumPolar(s), ((i + 1) / 96) * Math.PI * 2));
-    for (const d of DOMAINS) for (let i = 0; i < 48; i++) {
-      const lon = d.center - Math.PI / 6, p0 = spectrumPolar(0) + (i / 48) * (spectrumPolar(1) - spectrumPolar(0)), p1 = spectrumPolar(0) + ((i + 1) / 48) * (spectrumPolar(1) - spectrumPolar(0));
-      seg(onSphereAt(p0, lon), onSphereAt(p1, lon));
-    }
-    const gridLines = lines(grid, CYAN);
-    // 스크롤을 따라 기초 → 응용으로 내려가는 빛의 띠
-    const band = glowPoints(Array.from({ length: 220 }, () => [0, 0, 0]), 16, ICE);
     const nodePolar = INSTITUTE_NODES.map((n) => Math.acos(n.p[1] / NODE_R));
-    return { core, halo, nodes, spokes, shells, flow, flowCount, ring, stations, comet, missions, missionSpokes, gridLines, band, nodePolar };
+    return { core, halo, nodes, spokes, shells, flow, flowCount, ring, stations, comet, missions, missionSpokes, nodePolar };
   }, []);
 
   useFrame(({ clock }) => {
@@ -98,14 +87,8 @@ export function HubLayers({ reducedMotion }: { reducedMotion: boolean }) {
     set(parts.halo, w.hub * 0.18 * (1 + w.closing * 0.8));
     (parts.core.material as THREE.ShaderMaterial).uniforms.uScale.value = 1 + 0.12 * beat + w.convergence * 0.35;
     set(parts.nodes, w.hub * (0.6 + 0.4 * Math.max(w.hero, w.closing, w.convergence)) * (1 - 0.6 * Math.max(w.moonshot, w.platform)));
-    setLine(parts.gridLines, w.hub * 0.1);
-
-    // 빛의 띠와 그 근처 기관 노드 강조
+    // 스크롤을 따라 기초(위) → 응용(아래) 순서로 기관 노드가 차례로 밝아진다
     const sweep = sweepPolar(s);
-    const bandPos = parts.band.geometry.attributes.position as THREE.BufferAttribute;
-    for (let i = 0; i < 220; i++) { const q = onSphereAt(sweep, (i / 220) * Math.PI * 2 + t * 0.05, NODE_R * 1.01); bandPos.setXYZ(i, q[0], q[1], q[2]); }
-    bandPos.needsUpdate = true;
-    set(parts.band, w.hub * 0.55);
     const sizes = parts.nodes.geometry.attributes.aSize as THREE.BufferAttribute;
     parts.nodePolar.forEach((p, i) => sizes.setX(i, 40 + 70 * Math.exp(-Math.pow((p - sweep) / 0.18, 2))));
     sizes.needsUpdate = true;
@@ -144,8 +127,6 @@ export function HubLayers({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <group name="hub" scale={[1, 1, 1]} userData={{ radius: NODE_R }}>
       <primitive object={parts.halo} />
-      <primitive object={parts.gridLines} />
-      <primitive object={parts.band} />
       <primitive object={parts.spokes} />
       {parts.shells.map((sh, i) => <primitive key={i} object={sh} />)}
       <primitive object={parts.flow} />

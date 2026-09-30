@@ -6,9 +6,9 @@ const md = (d: string) => d.slice(5).replace("-", ".");
 
 function NextSteps() {
   return (
-    <div id="next-steps" className="relative z-10 -mx-4 bg-ink-950 px-4 pb-28 pt-16 md:-mx-8 md:px-8">
+    <div id="next-steps" className="relative z-10 bg-ink-950 pb-28 pt-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-40 bg-gradient-to-b from-transparent to-ink-950" />
-      <div className="mx-auto max-w-7xl">
+      <div className="container-site">
       <p className="eyebrow">Next Steps</p>
       <div className="mt-8 grid gap-12 md:grid-cols-3">
         {NEXT_STEPS.map((n) => (

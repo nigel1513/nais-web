@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function ComingSoon({ title, summary }: { title: string; summary: string }) {
   return (
-    <section className="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center gap-5 px-4 pt-28 md:px-8">
+    <section className="container-site flex min-h-[70vh] flex-col justify-center gap-5 pt-28">
       <p className="eyebrow">NAIS</p>
       <h1 className="text-4xl font-bold md:text-5xl">{title}</h1>
       <p className="text-lg text-muted">{summary}</p>

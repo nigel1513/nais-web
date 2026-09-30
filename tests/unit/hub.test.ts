@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { INSTITUTE_NODES, MISSION_NODES, SHELLS, LOOP_STATIONS, loopPoint, layerWeights, HUB_LABELS, DOMAINS, spectrumPolar, sweepPolar } from "@/lib/particles/hub";
+import { INSTITUTE_NODES, MISSION_NODES, SHELLS, LOOP_STATIONS, loopPoint, layerWeights, HUB_LABELS, DOMAINS, spectrumPolar, sweepPolar, NODE_R } from "@/lib/particles/hub";
 import { INSTITUTES } from "@/content/institutes";
 import { MISSIONS, LOOP_STAGES } from "@/content/home";
 
@@ -26,14 +26,14 @@ describe("hub geometry", () => {
     const spread = Math.max(...phys) - Math.min(...phys);
     expect(spread).toBeLessThan((2 * Math.PI) / 6);
   });
-  test("the sweep band moves from basic (north) to applied (south) as the page scrolls", () => {
+  test("the highlight moves from basic (north) to applied (south) as the page scrolls", () => {
     expect(sweepPolar({ from: 0, to: 0, t: 1 })).toBeCloseTo(spectrumPolar(0));
     expect(sweepPolar({ from: 6, to: 6, t: 1 })).toBeCloseTo(spectrumPolar(1));
     expect(sweepPolar({ from: 2, to: 3, t: 0.5 })).toBeGreaterThan(sweepPolar({ from: 1, to: 1, t: 1 }));
   });
   test("one node per institute on the sphere surface", () => {
     expect(INSTITUTE_NODES).toHaveLength(INSTITUTES.length);
-    INSTITUTE_NODES.forEach((n) => expect(len(n.p)).toBeCloseTo(1.62, 2));
+    INSTITUTE_NODES.forEach((n) => expect(len(n.p)).toBeCloseTo(NODE_R, 2));
   });
   test("one node per official mission, not overlapping institute nodes", () => {
     expect(MISSION_NODES).toHaveLength(MISSIONS.length);
@@ -43,6 +43,7 @@ describe("hub geometry", () => {
     expect(SHELLS.map((s) => s.label)).toEqual(["AI-OS", "GPU", "MODEL", "DATA", "MARKET"]);
     for (let i = 1; i < SHELLS.length; i++) expect(SHELLS[i].r).toBeGreaterThan(SHELLS[i - 1].r);
     expect(SHELLS[SHELLS.length - 1].r).toBeLessThan(1.5);
+    expect(NODE_R).toBeLessThan(1.45);
   });
   test("research loop has six stations on its ring", () => {
     expect(LOOP_STATIONS.map((s) => s.label)).toEqual([...LOOP_STAGES]);
@@ -64,6 +65,8 @@ describe("layerWeights", () => {
     expect(layerWeights({ from: 5, to: 5, t: 1 }).hub).toBe(0);
     expect(layerWeights({ from: 5, to: 5, t: 1 }).ecosystem).toBe(1);
     expect(layerWeights({ from: 6, to: 6, t: 1 }).hub).toBe(1);
+    expect(layerWeights({ from: 6, to: 6, t: 1 }).axis).toBe(0);
+    expect(layerWeights({ from: 0, to: 0, t: 1 }).axis).toBe(1);
   });
 });
 
@@ -73,6 +76,7 @@ test("labels carry a layer and cover every section meaning", () => {
   const texts = HUB_LABELS.map((l) => l.text);
   expect(texts).toContain("Fundamental Science");
   expect(texts).toContain("Applied Science");
-  for (const d of DOMAINS) expect(texts).toContain(d.label);
+  // 지구본처럼 보이는 적도 분야명은 두지 않는다
+  for (const d of DOMAINS) expect(texts).not.toContain(d.label);
   expect(HUB_LABELS.filter((l) => l.layer === "moonshot").map((l) => l.text)).toEqual(MISSIONS.map((m) => m.name));
 });

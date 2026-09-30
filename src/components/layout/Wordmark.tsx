@@ -1,6 +1,6 @@
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
+    <span className={`wordmark inline-flex items-center gap-2 ${className}`}>
       <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
         <circle cx="11" cy="11" r="9.5" fill="none" stroke="var(--color-cyan)" strokeWidth="1.2" />
         <circle cx="11" cy="11" r="2.4" fill="var(--color-cyan)" />

@@ -6,7 +6,7 @@ import { INSTITUTES, type Field } from "@/content/institutes";
 import { MISSIONS, LOOP_STAGES } from "@/content/home";
 
 /** NAIS 허브 구체의 의미 레이어. 모든 좌표는 particles 그룹(구 반지름 1.6)의 로컬 좌표다. */
-export const NODE_R = 1.62;
+export const NODE_R = 1.3; // 기관 노드를 구 안쪽에 두어 행성 표면이 아닌 네트워크로 보이게 한다
 const TAU = Math.PI * 2;
 
 /** 경도 = 연구 분야. 6개 분야가 구를 60°씩 나눠 가진다. */
@@ -55,7 +55,7 @@ export function sweepPolar(s: ResolvedState): number {
 
 export const SHELLS = ["AI-OS", "GPU", "MODEL", "DATA", "MARKET"].map((label, i) => ({ label, r: 0.35 + i * 0.24 }));
 
-const LOOP_R = 1.28, LOOP_TILT = 0.45;
+const LOOP_R = 1.28, LOOP_TILT = 1.05; // 구체 기울기가 작아도 궤도가 타원으로 보이도록 궤도 자체를 눕힌다
 export function loopPoint(u: number): Vec3 {
   const a = u * Math.PI * 2 - Math.PI / 2;
   const x = Math.cos(a) * LOOP_R, z = Math.sin(a) * LOOP_R;
@@ -70,7 +70,8 @@ export function layerWeights(s: ResolvedState): Record<Layer, number> {
   const e = s.t * s.t * (3 - 2 * s.t);
   const at = (i: number) => (s.from === s.to ? (s.from === i ? 1 : 0) : (s.to === i ? e : 0) + (s.from === i ? 1 - e : 0));
   const w = Object.fromEntries(STATES.map((name, i) => [name, at(i)])) as Record<Exclude<Layer, "hub">, number>;
-  return { ...w, hub: 1 - w.ecosystem, axis: 1 - w.ecosystem };
+  // 축 라벨(기초·응용)은 한반도 장면과 마지막 섹션(Next Steps 띠 위)에서는 숨긴다
+  return { ...w, hub: 1 - w.ecosystem, axis: Math.max(0, 1 - w.ecosystem - w.closing) };
 }
 
 const SHELL_DIR: Vec3 = [0.93, 0.28, 0.24];
@@ -78,7 +79,6 @@ export const HUB_LABELS: { text: string; p: Vec3; layer: Layer }[] = [
   { text: "NAIS", p: [0, 0, 0], layer: "hub" },
   { text: "Fundamental Science", p: [0, NODE_R * 1.16, 0], layer: "axis" },
   { text: "Applied Science", p: [0, -NODE_R * 1.16, 0], layer: "axis" },
-  ...DOMAINS.map((d) => ({ text: d.label, p: onSphere(Math.PI / 2, d.center, NODE_R * 1.08), layer: "hero" as const })),
   ...INSTITUTE_NODES.map((n) => ({ text: n.code, p: n.p, layer: "hero" as const })),
   ...SHELLS.map((s) => ({ text: s.label, p: SHELL_DIR.map((v) => v * s.r) as Vec3, layer: "platform" as const })),
   { text: "Science × AI", p: [0, 0.32, 0], layer: "convergence" },

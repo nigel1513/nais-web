@@ -91,3 +91,12 @@ test("institute CI list has a real section heading", async ({ page }) => {
   const size = await h.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(size).toBeGreaterThanOrEqual(28);
 });
+
+test("institute CIs render with a consistent optical size", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#institutes").scrollIntoViewIfNeeded();
+  const areas = await page.locator("#institutes img").evaluateAll((imgs) =>
+    imgs.map((i) => { const r = i.getBoundingClientRect(); return r.width * r.height; }));
+  expect(areas).toHaveLength(25);
+  expect(Math.max(...areas) / Math.min(...areas)).toBeLessThan(1.8);
+});

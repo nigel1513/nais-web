@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { HOME_SECTIONS, ECOSYSTEM_BODY } from "@/content/home";
 import { INSTITUTES } from "@/content/institutes";
+import { ciSize } from "@/lib/ci";
 import { Section } from "./Section";
 
 /** 소관 연구기관 CI 목록. 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
@@ -13,12 +14,16 @@ function InstituteLogos() {
         <h2 className="mt-4 text-[2rem] font-semibold tracking-[-0.025em] md:text-[2.6rem]">소관 연구기관</h2>
         <p className="mt-3 text-[15px] text-muted">국가과학기술연구회 소관 25개 과학기술분야 정부출연연구기관</p>
         <ul className="mt-12 grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {INSTITUTES.map((i) => (
-            <li key={i.code} className="flex h-12 items-center">
-              <Image src={`/ci/${i.code}.png`} alt={i.nameKo} title={i.nameKo} width={180} height={48}
-                className="h-auto max-h-11 w-auto max-w-[150px] object-contain opacity-60 transition-opacity duration-300 hover:opacity-100" />
-            </li>
-          ))}
+          {INSTITUTES.map((i) => {
+            const size = ciSize(i.ci.width, i.ci.height);
+            return (
+              <li key={i.code} className="flex h-16 items-center">
+                <Image src={`/ci/${i.code}.png`} alt={i.nameKo} title={i.nameKo} width={i.ci.width} height={i.ci.height}
+                  style={{ width: size.width, height: size.height }}
+                  className="max-w-full object-contain opacity-60 transition-opacity duration-300 hover:opacity-100" />
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

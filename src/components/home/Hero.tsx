@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <Section id={s.id} eyebrow={s.eyebrow} title={s.title} lead={HERO_SUB} as="h1" reveal={false}>
       <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-        <a href="#platform" className="inline-flex h-11 items-center rounded-full bg-fg px-6 text-[15px] font-semibold text-ink-950 transition-colors hover:bg-cyan">
+        <a href="#platform" className="inline-flex h-11 items-center rounded-full bg-fg px-6 text-[15px] font-semibold text-ink-950 press hover:bg-cyan">
           NAIS 둘러보기
         </a>
         <TextLink href="/about/">센터 소개</TextLink>

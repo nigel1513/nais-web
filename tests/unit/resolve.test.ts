@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { resolveState, snapForReducedMotion, sameState } from "@/lib/scroll/resolve";
+import { resolveState, snapForReducedMotion, sameState, toPosition, fromPosition, dampPosition } from "@/lib/scroll/resolve";
 import { particleStore } from "@/lib/scroll/store";
 
 const B = [1000, 2000, 3000, 4000, 5000, 6000]; // 7개 상태 → 전환 6개
@@ -38,3 +38,23 @@ test("sameState compares all fields", () => {
 });
 
 test("store starts at rest on state 0", () => expect(particleStore.getState()).toEqual({ from: 0, to: 0, t: 1 }));
+
+describe("smoothed position", () => {
+  test("position round-trips through states", () => {
+    expect(toPosition({ from: 2, to: 2, t: 1 })).toBe(2);
+    expect(toPosition({ from: 2, to: 3, t: 0.25 })).toBe(2.25);
+    expect(fromPosition(2)).toEqual({ from: 2, to: 2, t: 1 });
+    const s = fromPosition(2.25);
+    expect(s.from).toBe(2); expect(s.to).toBe(3); expect(s.t).toBeCloseTo(0.25);
+  });
+  test("damping moves part way toward the target", () => {
+    const p = dampPosition(1, 1.5, 0.016);
+    expect(p).toBeGreaterThan(1); expect(p).toBeLessThan(1.5);
+  });
+  test("damping settles on the target", () => {
+    let p = 1;
+    for (let i = 0; i < 120; i++) p = dampPosition(p, 1.5, 0.016);
+    expect(p).toBe(1.5);
+  });
+  test("jumps of more than one state snap", () => expect(dampPosition(0, 3, 0.016)).toBe(3));
+});

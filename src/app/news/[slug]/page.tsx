@@ -30,7 +30,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </div>
       <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
         {a.link && (
-          <SmartLink href={a.link.href} className="inline-flex h-11 items-center rounded-full bg-fg px-6 text-[15px] font-semibold text-ink-950 transition-colors hover:bg-cyan">
+          <SmartLink href={a.link.href} className="inline-flex h-11 items-center rounded-full bg-fg px-6 text-[15px] font-semibold text-ink-950 press hover:bg-cyan">
             {a.link.label}
           </SmartLink>
         )}

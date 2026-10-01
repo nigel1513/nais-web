@@ -15,6 +15,12 @@
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+/* 모션 토큰: 등장(긴 감속), UI 반응(강한 ease-out) */
+:root {
+  --ease-reveal: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-ui: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 /* 사이트 전체가 공유하는 가로 기준선: 최대 80rem, 좌우 여백 1rem(모바일)·2rem(md 이상) */
 @utility container-site {
   width: 100%;
@@ -35,15 +41,38 @@ h1, h2, h3 { text-wrap: balance; word-break: keep-all; }
 p { word-break: keep-all; }
 :focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 3px; }
 .eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-cyan); }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-}
-[data-reveal] { transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+[data-reveal] { transition: opacity 0.9s var(--ease-reveal), transform 0.9s var(--ease-reveal); }
 .reveal-pending { opacity: 0; transform: translateY(28px); }
 
 /* 단어 단위 등장 */
-[data-word] { display: inline-block; transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.9s ease; transition-delay: calc(var(--i, 0) * 55ms); }
+[data-word] { display: inline-block; transition: transform 0.9s var(--ease-reveal), opacity 0.9s var(--ease-reveal); transition-delay: calc(var(--i, 0) * 55ms); }
 .words-pending [data-word] { transform: translateY(0.7em); opacity: 0; }
-.hero-words [data-word] { animation: word-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+.hero-words [data-word] { animation: word-rise 1s var(--ease-reveal) both; animation-delay: calc(var(--i, 0) * 70ms); }
 @keyframes word-rise { from { transform: translateY(0.45em); } to { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .hero-words [data-word] { animation: none; } }
+.hero-lead { animation: lead-in 0.9s var(--ease-reveal) 0.25s both; }
+@keyframes lead-in { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) { .hero-words [data-word], .hero-lead { animation: none; } }
+
+/* 눌림 반응: 버튼·필터 칩이 손끝에서 살짝 들어간다 */
+.press { transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, transform 160ms var(--ease-ui); }
+.press:active { transform: scale(0.97); }
+
+/* 모바일 메뉴: 헤더 아래에서 살짝 내려오며 열리고, 닫힐 때는 더 빠르게 사라진다 */
+.mobile-nav { opacity: 0; transform: translateY(-8px); visibility: hidden; transition: opacity 150ms ease, transform 150ms var(--ease-ui), visibility 0s 150ms; }
+.mobile-nav[data-open] { opacity: 1; transform: none; visibility: visible; transition: opacity 200ms var(--ease-ui), transform 240ms var(--ease-ui), visibility 0s; }
+
+/* 메뉴 아이콘: 두 줄이 가운데로 모이며 X로 돈다 */
+.menu-line { transform-box: fill-box; transform-origin: center; transition: transform 200ms var(--ease-ui); }
+[aria-expanded="true"] > svg > .menu-line:first-child { transform: translateY(3px) rotate(45deg); }
+[aria-expanded="true"] > svg > .menu-line:last-child { transform: translateY(-3px) rotate(-45deg); }
+
+/* 내용 교체(조직도 부서 표, 소식 분류): 새 내용이 짧게 떠오른다. key로 다시 마운트될 때마다 재생된다 */
+.swap-in { animation: swap-in 220ms var(--ease-ui) both; }
+@keyframes swap-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* 감속 모드: 색·투명도 변화는 남기고 위치·크기 이동만 없앤다 */
+@media (prefers-reduced-motion: reduce) {
+  .press:active { transform: none; }
+  .mobile-nav, .swap-in { transform: none !important; }
+  .menu-line { transition: none; }
+}

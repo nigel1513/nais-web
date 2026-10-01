@@ -14,12 +14,12 @@ export function NewsList({ articles }: { articles: Article[] }) {
       <div role="tablist" aria-label="소식 분류" className="flex flex-wrap gap-2">
         {CATEGORIES.map((c) => (
           <button key={c} role="tab" aria-selected={cat === c} aria-controls="news-list" onClick={() => setCat(c)}
-            className={`rounded-full px-4 py-2 text-sm transition-colors ${cat === c ? "bg-fg font-semibold text-ink-950" : "border border-white/15 text-fg/70 hover:text-fg"}`}>
+            className={`press rounded-full px-4 py-2 text-sm ${cat === c ? "bg-fg font-semibold text-ink-950" : "border border-white/15 text-fg/70 hover:text-fg"}`}>
             {c}
           </button>
         ))}
       </div>
-      <div id="news-list" role="tabpanel" className="mt-12 space-y-12">
+      <div key={cat} id="news-list" role="tabpanel" className="swap-in mt-12 space-y-12">
         {list.map((a) => (
           <article key={a.slug} className="group grid gap-3 md:grid-cols-[9rem_1fr] md:gap-10">
             <div className="flex gap-3 md:block">

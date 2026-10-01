@@ -1,11 +1,11 @@
 "use client";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { STATES, lookAt } from "@/lib/particles/states";
 import { mulberry32 } from "@/lib/particles/rng";
 import { particleStore } from "@/lib/scroll/store";
-import { snapForReducedMotion } from "@/lib/scroll/resolve";
+import { snapForReducedMotion, toPosition, fromPosition, dampPosition, type ResolvedState } from "@/lib/scroll/resolve";
 import { pointsVertex, pointsFragment } from "./shaders";
 
 export const CYAN = new THREE.Color("#3fd0d4");
@@ -14,9 +14,19 @@ const ICE = new THREE.Color("#d9f4ff");
 const MAP = STATES.indexOf("ecosystem");
 const TAU = Math.PI * 2;
 
+// 장면이 실제로 그리는 상태. 스크롤이 정한 상태를 매 프레임 부드럽게 따라간다(ParticleSystem이 갱신).
+let shown: { p: number; s: ResolvedState } | null = null;
+
 export function currentState(reduced: boolean) {
   const s = particleStore.getState();
-  return reduced ? snapForReducedMotion(s) : s;
+  if (reduced) return snapForReducedMotion(s);
+  return shown?.s ?? s;
+}
+
+function advanceShown(dt: number) {
+  const target = toPosition(particleStore.getState());
+  const p = shown ? dampPosition(shown.p, target, dt) : target;
+  if (!shown || p !== shown.p) shown = { p, s: fromPosition(p) };
 }
 
 /** 하나의 점구름. 섹션에 따라 크기·회전·기울기·흐름·소용돌이·색조가 부드럽게 바뀐다. 자식(한반도 흐름·라벨)은 같은 변환을 따른다. */
@@ -59,6 +69,11 @@ export function ParticleSystem({ targets, reducedMotion, children }: { targets: 
   const cur = useRef({ from: 0, to: 0 });
   const group = useRef<THREE.Group>(null);
   const spinAngle = useRef(0);
+
+  useEffect(() => () => { shown = null; }, []);
+
+  // 우선순위 -1: 같은 프레임의 다른 레이어(허브·한반도·라벨)보다 먼저 상태를 갱신한다
+  useFrame((_, dt) => { if (!reducedMotion) advanceShown(Math.min(dt, 0.05)); }, -1);
 
   useFrame((state, dt) => {
     const s = currentState(reducedMotion);

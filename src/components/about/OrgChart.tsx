@@ -22,7 +22,7 @@ function Node({ unit, level, selected, onSelect }: { unit: OrgUnit; level: Level
   const empty = unit.staff.length === 0 && unit.children.length === 0;
   return (
     <button type="button" aria-expanded={active} aria-controls="unit-panel" onClick={() => onSelect(unit.id)}
-      className={`relative rounded-lg text-center leading-snug transition-colors ${NODE[level]} ${empty ? "text-fg/50" : ""} ${active ? "ring-2 ring-cyan ring-offset-2 ring-offset-ink-950" : ""}`}>
+      className={`press relative rounded-lg text-center leading-snug ${NODE[level]} ${empty ? "text-fg/50" : ""} ${active ? "ring-2 ring-cyan ring-offset-2 ring-offset-ink-950" : ""}`}>
       {unit.name}
     </button>
   );
@@ -92,14 +92,14 @@ export function OrgChart() {
 
       <div id="unit-panel" ref={panel} aria-live="polite" className="scroll-mt-40">
         {unit && (
-          <section aria-labelledby="unit-panel-title" className="mt-20">
+          <section key={unit.id} aria-labelledby="unit-panel-title" className="swap-in mt-20">
             <div className="flex items-start justify-between gap-6">
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.14em] text-cyan">{unit.nameEn}</p>
                 <h2 id="unit-panel-title" className="mt-2 text-[2rem] font-semibold tracking-[-0.025em] md:text-[2.4rem]">{unit.name}</h2>
                 {parent && <p className="mt-1 text-sm text-muted">{parent.name}</p>}
               </div>
-              <button type="button" onClick={close} className="shrink-0 rounded-full px-4 py-2 text-sm text-muted transition-colors hover:bg-white/5 hover:text-fg">닫기</button>
+              <button type="button" onClick={close} className="press shrink-0 rounded-full px-4 py-2 text-sm text-muted hover:bg-white/5 hover:text-fg">닫기</button>
             </div>
             <div className="mt-8">
               {unit.staff.length > 0

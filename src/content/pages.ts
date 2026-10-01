@@ -5,7 +5,7 @@ export const ABOUT_FACTS = [
   { label: "업무 개시", value: "2026년 5월" },
   { label: "소속", value: "국가과학기술연구회" },
   { label: "2026년 예산", value: "400억 원" },
-  { label: "지원 대상", value: "소관 연구기관 25곳" },
+  { label: "지원 대상", value: "소관 연구기관 23곳" },
 ];
 
 export const ABOUT_PURPOSE =

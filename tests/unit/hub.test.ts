@@ -15,7 +15,7 @@ describe("hub geometry", () => {
   });
   test("basic science sits north, applied science south", () => {
     const y = (code: string) => INSTITUTE_NODES.find((n) => n.code === code)!.p[1];
-    expect(y("KASI")).toBeGreaterThan(y("KRISS"));
+    expect(y("KBSI")).toBeGreaterThan(y("KRISS"));
     expect(y("KRISS")).toBeGreaterThan(y("ETRI"));
     expect(y("ETRI")).toBeGreaterThan(y("KRRI"));
     expect(spectrumPolar(0)).toBeLessThan(spectrumPolar(1));

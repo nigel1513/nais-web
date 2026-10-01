@@ -1,4 +1,5 @@
-// 국가과학기술연구회 소관연구기관 25개(https://www.nst.re.kr/www/contents.do?key=20, 2026-09-30 확인,).
+// 국가과학기술연구회 소관연구기관 23개(https://www.nst.re.kr/www/contents.do?key=20, 2026-10-01 확인).
+// 한국천문연구원·한국항공우주연구원은 2024년 우주항공청 소관으로 옮겨 제외했다.
 // field·spectrum은 NAIS 사이트 시각화를 위한 분류로, 각 기관의 설립 목적을 기준으로 정했다(공식 분류 아님).
 // 좌표는 각 기관 공식 주소 기준 도시 수준 근사값(시각화용, ±1km). CI는 public/ci/{code}.png.
 // 배포 전 기관 홈페이지 주소로 재확인할 것.
@@ -13,7 +14,6 @@ export const INSTITUTES: Institute[] = [
   { code: "KIST", nameKo: "한국과학기술연구원", city: "서울", lon: 127.0466, lat: 37.6036 , ci: { width: 190, height: 46 }, field: "engineering", spectrum: 0.4 },
   { code: "NIGT", nameKo: "국가녹색기술연구소", city: "서울", lon: 126.9975, lat: 37.5635 , ci: { width: 86, height: 67 }, field: "earth", spectrum: 0.65 },
   { code: "KBSI", nameKo: "한국기초과학지원연구원", city: "대전", lon: 127.3625, lat: 36.3724 , ci: { width: 191, height: 24 }, field: "chemistry", spectrum: 0.1 },
-  { code: "KASI", nameKo: "한국천문연구원", city: "대전", lon: 127.3614, lat: 36.3736 , ci: { width: 193, height: 52 }, field: "physics", spectrum: 0.05 },
   { code: "KRIBB", nameKo: "한국생명공학연구원", city: "대전", lon: 127.3587, lat: 36.3735 , ci: { width: 196, height: 44 }, field: "life", spectrum: 0.3 },
   { code: "KISTI", nameKo: "한국과학기술정보연구원", city: "대전", lon: 127.3603, lat: 36.3913 , ci: { width: 199, height: 41 }, field: "ict", spectrum: 0.35 },
   { code: "KIOM", nameKo: "한국한의학연구원", city: "대전", lon: 127.354, lat: 36.3925 , ci: { width: 157, height: 68 }, field: "life", spectrum: 0.55 },
@@ -27,7 +27,6 @@ export const INSTITUTES: Institute[] = [
   { code: "WiKim", nameKo: "세계김치연구소", city: "광주", lon: 126.84, lat: 35.18 , ci: { width: 105, height: 55 }, field: "life", spectrum: 0.85 },
   { code: "KIGAM", nameKo: "한국지질자원연구원", city: "대전", lon: 127.357, lat: 36.3749 , ci: { width: 204, height: 24 }, field: "earth", spectrum: 0.3 },
   { code: "KIMM", nameKo: "한국기계연구원", city: "대전", lon: 127.3571, lat: 36.3918 , ci: { width: 197, height: 36 }, field: "engineering", spectrum: 0.65 },
-  { code: "KARI", nameKo: "한국항공우주연구원", city: "대전", lon: 127.3565, lat: 36.3735 , ci: { width: 199, height: 52 }, field: "physics", spectrum: 0.7 },
   { code: "KIER", nameKo: "한국에너지기술연구원", city: "대전", lon: 127.357, lat: 36.38 , ci: { width: 199, height: 37 }, field: "earth", spectrum: 0.6 },
   { code: "KERI", nameKo: "한국전기연구원", city: "창원", lon: 128.717, lat: 35.19 , ci: { width: 200, height: 22 }, field: "earth", spectrum: 0.72 },
   { code: "KRICT", nameKo: "한국화학연구원", city: "대전", lon: 127.36, lat: 36.3755 , ci: { width: 201, height: 31 }, field: "chemistry", spectrum: 0.45 },

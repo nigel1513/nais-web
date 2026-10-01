@@ -52,7 +52,7 @@ src/
 │  ├─ home.ts           홈 섹션 문구
 │  ├─ pages.ts          소개·연혁·연구·사업·소식
 │  ├─ organization.ts   조직도 트리
-│  ├─ institutes.ts     소관 연구기관 25곳 (분야·좌표·CI)
+│  ├─ institutes.ts     소관 연구기관 23곳 (분야·좌표·CI)
 │  └─ korea-outline.json 한반도 경계 (scripts/build-korea-outline.mjs로 생성)
 └─ lib/
    ├─ particles/        입자 목표 형태·상태·흐름 계산 (순수 함수)
@@ -96,7 +96,7 @@ src/
 
 | 경로 | 내용 |
 |---|---|
-| `/` | 히어로 · AI 플랫폼 · AI 융합 · 자율형 AI 과학자 · K-문샷 · 연구 생태계(25개 기관) · 소식 |
+| `/` | 히어로 · AI 플랫폼 · AI 융합 · 자율형 AI 과학자 · K-문샷 · 연구 생태계(23개 기관) · 소식 |
 | `/about/` | 설립 목적, 업무 개시, 예산, 지원 대상 |
 | `/about/history/` | 연혁 이정표 |
 | `/about/organization/` | 위→아래 조직도, 부서 선택 시 직위·담당업무·전화 표 |

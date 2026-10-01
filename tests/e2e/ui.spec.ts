@@ -48,11 +48,11 @@ test("seed facts count up to their final values", async ({ page }) => {
   await expect(values.nth(1)).toHaveText("15", { timeout: 4000 });
 });
 
-test("ecosystem lists the 25 institute CIs instead of a text marquee", async ({ page }) => {
+test("ecosystem lists the 23 institute CIs instead of a text marquee", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#ecosystem [data-marquee]")).toHaveCount(0);
   const logos = page.locator("#institutes img");
-  await expect(logos).toHaveCount(25);
+  await expect(logos).toHaveCount(23);
   await expect(page.locator('#institutes img[alt="한국원자력연구원"]')).toHaveCount(1);
 });
 
@@ -86,7 +86,7 @@ test("institute CIs render with a consistent optical size", async ({ page }) => 
   await page.locator("#institutes").scrollIntoViewIfNeeded();
   const areas = await page.locator("#institutes img").evaluateAll((imgs) =>
     imgs.map((i) => { const r = i.getBoundingClientRect(); return r.width * r.height; }));
-  expect(areas).toHaveLength(25);
+  expect(areas).toHaveLength(23);
   expect(Math.max(...areas) / Math.min(...areas)).toBeLessThan(1.8);
 });
 
@@ -100,11 +100,11 @@ test("institute logos close the page after the news, with no Next Steps band", a
 
 test("ecosystem list uses the same official names and order as the institute CI list", async ({ page }) => {
   await page.goto("/");
-  const names = await page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"] li').allTextContents();
+  const names = await page.locator('#ecosystem ul[aria-label="소관 연구기관 23곳"] li').allTextContents();
   const alts = await page.locator("#institutes img").evaluateAll((imgs) => imgs.map((i) => i.getAttribute("alt")));
-  expect(names).toHaveLength(25);
+  expect(names).toHaveLength(23);
   expect(names).toEqual(alts);
-  const right = await page.locator('#ecosystem ul[aria-label="소관 연구기관 25곳"]').evaluate((el) => el.getBoundingClientRect().right);
+  const right = await page.locator('#ecosystem ul[aria-label="소관 연구기관 23곳"]').evaluate((el) => el.getBoundingClientRect().right);
   expect(right).toBeLessThanOrEqual(await page.evaluate(() => window.innerWidth));
 });
 

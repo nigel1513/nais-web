@@ -27,15 +27,16 @@ describe("home content", () => {
 describe("geo data", () => {
   test("institutes follow the NST 소관연구기관 page order exactly", () => {
     expect(INSTITUTES.map((i) => i.nameKo)).toEqual([
-      "한국과학기술연구원", "국가녹색기술연구소", "한국기초과학지원연구원", "한국천문연구원", "한국생명공학연구원",
+      "한국과학기술연구원", "국가녹색기술연구소", "한국기초과학지원연구원", "한국생명공학연구원",
       "한국과학기술정보연구원", "한국한의학연구원", "한국생산기술연구원", "한국전자통신연구원", "국가보안기술연구소",
       "한국건설기술연구원", "한국철도기술연구원", "한국표준과학연구원", "한국식품연구원", "세계김치연구소",
-      "한국지질자원연구원", "한국기계연구원", "한국항공우주연구원", "한국에너지기술연구원", "한국전기연구원",
+      "한국지질자원연구원", "한국기계연구원", "한국에너지기술연구원", "한국전기연구원",
       "한국화학연구원", "국가독성과학연구소", "한국원자력연구원", "한국재료연구원", "한국핵융합에너지연구원",
     ]);
   });
-  test("institutes are the 25 NST 소관연구기관 and each has a CI file", () => {
-    expect(INSTITUTES).toHaveLength(25);
+  test("institutes are the 23 NST 소관연구기관 and each has a CI file", () => {
+    expect(INSTITUTES).toHaveLength(23);
+    for (const n of ["한국천문연구원", "한국항공우주연구원"]) expect(INSTITUTES.map((i) => i.nameKo)).not.toContain(n); // 2024년 우주항공청 이관
     for (const n of ["국가녹색기술연구소", "국가독성과학연구소", "한국핵융합에너지연구원"]) expect(INSTITUTES.map((i) => i.nameKo)).toContain(n);
     expect(INSTITUTES.map((i) => i.nameKo)).not.toContain("안전성평가연구소");
     for (const i of INSTITUTES) expect(existsSync(`public/ci/${i.code}.png`)).toBe(true);

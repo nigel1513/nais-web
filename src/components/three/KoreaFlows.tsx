@@ -72,7 +72,7 @@ export function KoreaFlows({ reducedMotion }: { reducedMotion: boolean }) {
       vertexShader: arcVertex, fragmentShader: arcFragment, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uColor: { value: BLUE }, uOpacity: { value: 0 } },
     }));
-    // 25개 기관 마커(실제 소재지)
+    // 23개 기관 마커(실제 소재지)
     const markers = glowPoints(MAP_MARKERS.map((m) => [m.p[0], m.p[1], 0.004]), 46, new THREE.Color("#e6f8ff"));
     const southLines = ringLines(SOUTH_RINGS);
     const northLines = ringLines(NORTH_RINGS);

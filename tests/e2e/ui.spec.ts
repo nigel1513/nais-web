@@ -122,3 +122,12 @@ test("every careers link goes to the NST recruitment site in a new tab", async (
   await expect(go).toHaveAttribute("href", "https://nst.fairy.im/");
   await expect(go).toHaveAttribute("target", "_blank");
 });
+
+test("institute logos and names open each homepage in a new tab", async ({ page }) => {
+  await page.goto("/");
+  const logos = page.locator("#institutes a[href*='.re.kr']");
+  await expect(logos).toHaveCount(22);
+  await expect(logos.first()).toHaveAttribute("target", "_blank");
+  await expect(page.locator("#institutes").getByRole("link", { name: "한국과학기술연구원" })).toHaveAttribute("href", "https://www.kist.re.kr/");
+  await expect(page.locator('#ecosystem ul[aria-label="소관 연구기관 23곳"] a')).toHaveCount(22);
+});

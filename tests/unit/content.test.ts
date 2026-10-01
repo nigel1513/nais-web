@@ -41,6 +41,12 @@ describe("geo data", () => {
     expect(INSTITUTES.map((i) => i.nameKo)).not.toContain("안전성평가연구소");
     for (const i of INSTITUTES) expect(existsSync(`public/ci/${i.code}.png`)).toBe(true);
   });
+  test("every institute links to its own https homepage except NSR (no public site)", () => {
+    for (const i of INSTITUTES) {
+      if (i.code === "NSR") expect(i.url).toBeUndefined();
+      else expect(i.url).toMatch(/^https:\/\/www\.[a-z]+\.re\.kr\/$/);
+    }
+  });
   test("institutes inside South Korea bounds", () => {
     INSTITUTES.forEach((i) => {
       expect(i.lon).toBeGreaterThan(124.5); expect(i.lon).toBeLessThan(130);

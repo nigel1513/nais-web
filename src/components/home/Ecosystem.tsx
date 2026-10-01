@@ -3,6 +3,7 @@ import { HOME_SECTIONS, ECOSYSTEM_BODY } from "@/content/home";
 import { INSTITUTES } from "@/content/institutes";
 import { ciSize } from "@/lib/ci";
 import { Section } from "./Section";
+import { SmartLink } from "@/components/ui/SmartLink";
 
 /** 소관 연구기관 CI 목록. 소식 다음, 푸터 바로 앞에 두며 파티클이 비치지 않도록 불투명한 띠 위에 둔다. */
 export function InstituteLogos() {
@@ -16,11 +17,14 @@ export function InstituteLogos() {
         <ul className="mt-12 grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {INSTITUTES.map((i) => {
             const size = ciSize(i.ci.width, i.ci.height);
+            const logo = (
+              <Image src={`/ci/${i.code}.png`} alt={i.nameKo} title={i.nameKo} width={i.ci.width} height={i.ci.height}
+                style={{ width: size.width, height: size.height }}
+                className="max-w-full object-contain opacity-60 transition-opacity duration-300 group-hover:opacity-100" />
+            );
             return (
-              <li key={i.code} className="flex h-16 items-center">
-                <Image src={`/ci/${i.code}.png`} alt={i.nameKo} title={i.nameKo} width={i.ci.width} height={i.ci.height}
-                  style={{ width: size.width, height: size.height }}
-                  className="max-w-full object-contain opacity-60 transition-opacity duration-300 hover:opacity-100" />
+              <li key={i.code} className="group flex h-16 items-center">
+                {i.url ? <SmartLink href={i.url} className="flex max-w-full items-center">{logo}</SmartLink> : logo}
               </li>
             );
           })}
@@ -37,7 +41,9 @@ export function Ecosystem() {
       <div data-reveal>
         <p className="text-[13px] text-muted">소관 연구기관 {INSTITUTES.length}곳</p>
         <ul aria-label={`소관 연구기관 ${INSTITUTES.length}곳`} className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[14px] text-fg/80 sm:grid-cols-3">
-          {INSTITUTES.map((i) => <li key={i.code}>{i.nameKo}</li>)}
+          {INSTITUTES.map((i) => (
+            <li key={i.code}>{i.url ? <SmartLink href={i.url} className="transition-colors hover:text-cyan">{i.nameKo}</SmartLink> : i.nameKo}</li>
+          ))}
         </ul>
       </div>
     </Section>

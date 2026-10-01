@@ -18,11 +18,12 @@ export default function AboutPage() {
         </div>
         <div className="space-y-10 lg:col-span-7">
           <p className="text-[17px] leading-[1.85] text-fg/80">{ABOUT_PURPOSE}</p>
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4">
+          {/* 칸 폭을 고정하지 않고 값 길이만큼 쓴다. 값은 줄바꿈하지 않고, 자리가 모자라면 항목째 다음 줄로 넘어간다 */}
+          <dl className="grid grid-cols-[auto_auto] justify-start gap-x-12 gap-y-8 sm:flex sm:flex-wrap">
             {ABOUT_FACTS.map((f) => (
               <div key={f.label}>
                 <dt className="text-[13px] text-muted">{f.label}</dt>
-                <dd className="mt-2 text-xl font-semibold tracking-[-0.02em]">{f.value}</dd>
+                <dd className="mt-2 whitespace-nowrap text-xl font-semibold tracking-[-0.02em]">{f.value}</dd>
               </div>
             ))}
           </dl>
